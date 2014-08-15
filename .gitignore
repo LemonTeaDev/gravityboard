@@ -19,3 +19,18 @@
 *.exe
 *.out
 *.app
+
+# User-specific files
+*.suo
+*.user
+*.sdf
+
+# Build results
+*/[Dd]ebug/
+*/[Rr]elease/
+*/[Dd]ebug.[Ww]in32/
+*/[Rr]elease.[Ww]in32/
+*/x64/
+*/x86/
+*/[Bb]in/
+*/[Oo]bj/
