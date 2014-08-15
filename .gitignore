@@ -24,6 +24,7 @@
 *.suo
 *.user
 *.sdf
+*.opensdf
 
 # Build results
 */[Dd]ebug/
