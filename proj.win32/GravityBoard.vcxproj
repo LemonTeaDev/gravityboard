@@ -139,6 +139,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\GameMgr.cpp" />
     <ClCompile Include="..\Classes\GameScene.cpp" />
     <ClCompile Include="..\Classes\PlayStone.cpp" />
+    <ClCompile Include="..\Classes\ResultScene.cpp" />
     <ClCompile Include="..\Classes\TileMgr.cpp" />
     <ClCompile Include="..\Classes\TitleScene.cpp" />
     <ClCompile Include="..\pch.cpp">
@@ -153,6 +154,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\GameMgr.h" />
     <ClInclude Include="..\Classes\GameScene.h" />
     <ClInclude Include="..\Classes\PlayStone.h" />
+    <ClInclude Include="..\Classes\ResultScene.h" />
     <ClInclude Include="..\Classes\Singleton.hpp" />
     <ClInclude Include="..\Classes\TileMgr.h" />
     <ClInclude Include="..\Classes\TitleScene.h" />
