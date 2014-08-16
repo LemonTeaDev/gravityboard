@@ -18,6 +18,7 @@
 *.tlog
 *.lastbuildstate
 *.idb
+*.orig
 
 # Build results
 */[Dd]ebug/

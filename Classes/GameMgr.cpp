@@ -5,15 +5,18 @@ Singleton<GameMgr> _g_GameMgr;
 
 GameMgr::GameMgr()
 : gameMode(none)
+, reservedGameMode(ffa4)
 , numPlayers(4)
 , currentCastPlayer(1)
 , currentTurnStarter(1)
+, reverseClicked(false)
 {
 }
 
-void GameMgr::Init(GameMode mode)
+void GameMgr::StartGame()
 {
-	switch (mode)
+	gameMode = reservedGameMode;	
+	switch (gameMode)
 	{
 		case ffa3:
 		{
@@ -45,6 +48,16 @@ void GameMgr::Init(GameMode mode)
 		}
 		break;
 	}
+
+	for (int_fast8_t i = 1; i <= numPlayers; ++i)
+	{
+		playerReverseUsedMap[i] = false;
+	}
+}
+
+void GameMgr::EndGame()
+{
+	// TODO
 }
 
 void GameMgr::LoadSettings(LPCWSTR modeName) {
@@ -94,6 +107,15 @@ void GameMgr::OnTurnEnd()
 
 	currentTurnStarter = (currentTurnStarter + 1) % numPlayers;
 	currentCastPlayer += currentTurnStarter;
+}
+
+void GameMgr::OnPlayerCast()
+{
+	--currentCastPlayer;
+	if (currentCastPlayer < 0)
+	{
+		currentCastPlayer = numPlayers - 1;
+	}
 }
 
 GameMgr::GameMode GameMgr::GetGameMode() const

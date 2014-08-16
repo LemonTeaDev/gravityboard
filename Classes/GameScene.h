@@ -19,6 +19,9 @@ public:
     CREATE_FUNC(GameScene);
 
 private:
+	void RegisterTouchHandler();
+
+private:
 	TileMgr tileMgr;
 };
 
