@@ -114,7 +114,7 @@ void GameMgr::OnPlayerCast()
 	--currentCastPlayer;
 	if (currentCastPlayer < 0)
 	{
-		currentCastPlayer = numPlayers - 1;
+		currentCastPlayer += numPlayers;
 	}
 }
 
