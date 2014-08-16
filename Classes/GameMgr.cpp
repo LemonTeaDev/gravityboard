@@ -257,7 +257,31 @@ int GameMgr::GetCurrentTurnStarter()
 
 void GameMgr::OnTurnEnd()
 {
-	(gameScene->GetTileMgr()).GetTiles();
+	for (int i = 0; i < boardWidth; ++i) {
+		std::map<int, int> gravity; // magnitudes of gravity at each position
+		gravity[1] = 1; // gravity at first column is always 1
+		for (int j = 2; j <= boardLength; ++j) { // record gravity magnitudes
+			gravity[j] = gravity[j - 1] + (gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount() * (reverseClicked ? -1 : 1);
+		}
+
+		for (int j = 1; j <= boardLength; ++j) { // move pieces
+			if ((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount()) {
+				int destination = j - gravity[j];
+
+				
+
+				((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildren())[0]
+				(gameScene->GetTileMgr()).GetTiles()[i][destination]->addChild((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildByTag());
+				(gameScene->GetTileMgr()).GetTiles()[i][j]->removeAllChildren();
+			}
+		}
+
+		for (int j = 0; j <= boardLength; ++j) { // delete destroyed pieces and calculate points
+			if (j == 0) {
+
+			}
+		}
+	}
 
 	currentTurnStarter = (currentTurnStarter + 1) % numPlayers;
 	currentCastPlayer += currentTurnStarter;
