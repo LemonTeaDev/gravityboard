@@ -79,6 +79,7 @@ bool ResultScene::init()
 		{
 			++currentRank;
 		}
+		prevPlayerScore = currentPlayerScore;
 
 		resultString += GetRankString(currentRank);
 		resultString += "  ";

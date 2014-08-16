@@ -23,6 +23,7 @@ private:
 	static const int PLAYER_3_SCORE_LABEL_TAG = 153;
 	static const int PLAYER_4_SCORE_LABEL_TAG = 154;
 	static const int INFO_LABEL_TAG = 201;
+	static const int REVERSE_MENU_TAG = 300;
 	static const int REVERSE_BUTTON_TAG = 301;
 
 public:

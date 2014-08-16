@@ -45,19 +45,19 @@ bool PlayStone::Init(
 
 	if (ownerPlayer == 1)
 	{
-		playerPrefix = "sun";
+		playerPrefix += "sun";
 	}
 	else if (ownerPlayer == 2)
 	{
-		playerPrefix = "moon";
+		playerPrefix += "moon";
 	}
 	else if (ownerPlayer == 3)
 	{
-		playerPrefix = "star";
+		playerPrefix += "star";
 	}
 	else if (ownerPlayer == 4)
 	{
-		playerPrefix = "planet";
+		playerPrefix += "planet";
 	}
 
 	std::string spriteName = playerPrefix + std::to_string(colPos) + ".png";

@@ -209,17 +209,12 @@ void GameMgr::OnPlayerCast()
 	}
 
 	// update card usage info
-	if (gameScene != nullptr)
-	{
-		gameScene->UpdateCardInfo();
-	}
-
 	// update reverse btn
 	if (gameScene != nullptr)
 	{
-		
+		gameScene->UpdateCardInfo();
+		gameScene->UpdateReverseButton();
 	}
-
 
 	if (((currentCastPlayer + numPlayers) - currentTurnStarter) % numPlayers == 0)
 	{
@@ -230,6 +225,11 @@ void GameMgr::OnPlayerCast()
 GameMgr::GameMode GameMgr::GetGameMode() const
 {
 	return gameMode;
+}
+
+void GameMgr::UseReverse(int playerIdx)
+{
+	playerReverseUsedMap[playerIdx] = true;
 }
 
 bool GameMgr::IsReverseUsed(int playerIdx)
