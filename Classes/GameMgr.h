@@ -8,12 +8,12 @@ private:
 	const int BOARD_Z = 2;
 	const int BOARD_CONTENT_Z = 3;
 
-	const int_fast8_t DEFAULT_NUM_PLAYERS = 4;
-	typedef std::map<int_fast8_t, int_fast8_t> CardMap;
-	typedef std::map<int_fast8_t, CardMap> PlayerCardMap;
-	typedef std::map<int_fast8_t, int_fast8_t> CardScoreMap;
-	typedef std::map<int_fast8_t, int_fast32_t> PlayerScoreMap;
-	typedef std::map<int_fast8_t, bool> PlayerReverseUsedMap;
+	const int DEFAULT_NUM_PLAYERS = 4;
+	typedef std::map<int, int> CardMap;
+	typedef std::map<int, CardMap> PlayerCardMap;
+	typedef std::map<int, int> CardScoreMap;
+	typedef std::map<int, int> PlayerScoreMap;
+	typedef std::map<int, bool> PlayerReverseUsedMap;
 
 public:
 	enum GameMode
@@ -31,29 +31,33 @@ public:
 	void StartGame(GameScene* gameScene);
 	void EndGame();
 
-	int_fast8_t GetCurrentCastPlayer();
-	int_fast8_t GetCurrentTurnStarter();
+	int GetCurrentCastPlayer();
+	int GetCurrentTurnStarter();
 
 	void OnPlayerCast();
 	void OnTurnEnd();
 
 	GameMode GetGameMode() const;
 	
-	bool IsTeamMember(int_fast8_t playerIdx1, int_fast8_t playerIdx2);
+	bool IsTeamMember(int playerIdx1, int playerIdx2);
 
 	GameMode reservedGameMode;	// can change in title screen
+
+	std::string GetPlayerScoreString(int playerIdx);
+	std::string GetGameInfoString();
+	void UpdateScoreBoard();
 
 public:
 	bool reverseClicked;
 
 private:
-	int_fast8_t numPlayers;
-	int_fast8_t boardWidth, boardLength;
-	int_fast8_t turns;
+	int numPlayers;
+	int boardWidth, boardLength;
+	int turns;
 	CardScoreMap cardPoints;
 
-	int_fast8_t currentTurnStarter;
-	int_fast8_t currentCastPlayer;
+	int currentTurnStarter;
+	int currentCastPlayer;
 	PlayerCardMap playerCardMap;
 	PlayerScoreMap playerScoreMap;
 	PlayerReverseUsedMap playerReverseUsedMap;

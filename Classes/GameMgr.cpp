@@ -8,7 +8,7 @@ USING_NS_CC;
 
 GameMgr::GameMgr()
 : gameMode(none)
-, reservedGameMode(ffa3)
+, reservedGameMode(ffa4)
 , numPlayers(4)
 , currentCastPlayer(1)
 , currentTurnStarter(1)
@@ -47,7 +47,7 @@ void GameMgr::StartGame(GameScene* _gameScene)
 		break;
 	}
 
-	for (int_fast8_t i = 1; i <= numPlayers; ++i)
+	for (int i = 1; i <= numPlayers; ++i)
 	{
 		playerReverseUsedMap[i] = false;
 	}
@@ -59,7 +59,7 @@ void GameMgr::StartGame(GameScene* _gameScene)
 	board->setAnchorPoint(Vec2(0.f, 0.f));
 	board->setPosition(origin.x + visibleSize.width - boardSize.width, origin.y + visibleSize.height - boardSize.height);
 
-	Sprite* p1Icon = Sprite::create("player1.png");
+	Sprite* p1Icon = Sprite::create("headSun.png");
 	p1Icon->setTag(GameScene::PLAYER_1_SCORE_ICON_TAG);
 	p1Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
 	gameScene->addChild(p1Icon, BOARD_CONTENT_Z);
@@ -70,7 +70,7 @@ void GameMgr::StartGame(GameScene* _gameScene)
 	p1Score->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
 	gameScene->addChild(p1Score, BOARD_CONTENT_Z);
 
-	Sprite* p2Icon = Sprite::create("player2.png");
+	Sprite* p2Icon = Sprite::create("headMoon.png");
 	p2Icon->setTag(GameScene::PLAYER_2_SCORE_ICON_TAG);
 	p2Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
 	gameScene->addChild(p2Icon, BOARD_CONTENT_Z);
@@ -81,7 +81,7 @@ void GameMgr::StartGame(GameScene* _gameScene)
 	p2Score->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
 	gameScene->addChild(p2Score, BOARD_CONTENT_Z);
 
-	Sprite* p3Icon = Sprite::create("player3.png");
+	Sprite* p3Icon = Sprite::create("headStar.png");
 	p3Icon->setTag(GameScene::PLAYER_3_SCORE_ICON_TAG);
 	p3Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
 	gameScene->addChild(p3Icon, BOARD_CONTENT_Z);
@@ -96,7 +96,7 @@ void GameMgr::StartGame(GameScene* _gameScene)
 	LabelTTF* p4Score = nullptr;
 	if (numPlayers > 3)
 	{
-		p4Icon = Sprite::create("player4.png");
+		p4Icon = Sprite::create("headPlanet.png");
 		p4Icon->setTag(GameScene::PLAYER_4_SCORE_ICON_TAG);
 		p4Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
 		gameScene->addChild(p4Icon, BOARD_CONTENT_Z);
@@ -176,10 +176,16 @@ void GameMgr::StartGame(GameScene* _gameScene)
 		}
 	}
 
-	{
-
+	{	// other info line setting
+		float endX = origin.x + visibleSize.width;
+		float infoY = origin.y + visibleSize.height - p3Score->getContentSize().height - 120;
+		LabelTTF* infoLabel = LabelTTF::create(GetGameInfoString(), "Arial", 26);
+		infoLabel->setColor(Color3B(0, 0, 0));
+		infoLabel->setTag(GameScene::INFO_LABEL_TAG);
+		infoLabel->setPosition(endX - infoLabel->getContentSize().width - 35, infoY);
+		infoLabel->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
+		gameScene->addChild(infoLabel, BOARD_CONTENT_Z);
 	}
-
 
 	gameScene->addChild(board, BOARD_Z);
 	
@@ -208,7 +214,7 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 	boardLength = GetPrivateProfileInt(modeName, L"Length", 6, L"gravity.ini");;
 	turns = 0;
 
-	int_fast8_t buffer;
+	int buffer;
 	if (gameMode == ffa3s || gameMode == ffa4s) {
 		buffer = GetPrivateProfileInt(modeName, L"CardPoints", 123456, L"gravity.ini");
 	} else {
@@ -218,7 +224,7 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 		cardPoints[i] = buffer % 10;
 		buffer /= 10;
 	}
-	GetPrivateProfileInt(L"Custom", L"CardMap", buffer, L"gravity.ini");
+	buffer = GetPrivateProfileInt(L"Custom", L"CardMap", 111222, L"gravity.ini");
 	CardMap cardMap;
 	for (int i = boardLength; i >= 1; i--) {
 		cardMap[i] = buffer % 10;
@@ -227,7 +233,9 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 	}
 	
 	for (int i = 1; i <= numPlayers; i++) {
-		playerCardMap[i] = cardMap;
+		for (int j = 1; j <= boardLength; j++) {
+			playerCardMap[i][j] = cardMap[j];
+		}
 		playerScoreMap[i] = 0;
 	}
 
@@ -237,12 +245,12 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 	currentCastPlayer = currentTurnStarter;
 }
 
-int_fast8_t GameMgr::GetCurrentCastPlayer()
+int GameMgr::GetCurrentCastPlayer()
 {
 	return currentCastPlayer;
 }
 
-int_fast8_t GameMgr::GetCurrentTurnStarter()
+int GameMgr::GetCurrentTurnStarter()
 {
 	return currentTurnStarter;
 }
@@ -267,4 +275,31 @@ void GameMgr::OnPlayerCast()
 GameMgr::GameMode GameMgr::GetGameMode() const
 {
 	return gameMode;
+}
+
+std::string GameMgr::GetPlayerScoreString(int playerIdx)
+{
+	return std::to_string(playerScoreMap[playerIdx]);
+}
+
+std::string GameMgr::GetGameInfoString()
+{
+	std::string gameInfoStr = "[" + std::to_string(currentCastPlayer) + "P Turn]  ";
+	for (int i = 1; i <= boardLength; ++i)
+	{
+		gameInfoStr += std::to_string(i);
+		gameInfoStr += ": ";
+		gameInfoStr += std::to_string(playerCardMap[currentCastPlayer][i]);
+		gameInfoStr += " / "; 
+	}
+
+	gameInfoStr += "Rotations Left: ";
+	gameInfoStr += std::to_string(turns);
+
+	return gameInfoStr;
+}
+
+void GameMgr::UpdateScoreBoard()
+{
+
 }

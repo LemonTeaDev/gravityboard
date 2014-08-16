@@ -5,8 +5,8 @@
 USING_NS_CC;
 
 PlayStone* PlayStone::create(
-	int_fast8_t _ownerPlayer, 
-	int_fast8_t _col, 
+	int _ownerPlayer, 
+	int _col, 
 	bool _reverse)
 {
 	PlayStone* ret = new PlayStone();
@@ -22,8 +22,8 @@ PlayStone* PlayStone::create(
 }
 
 bool PlayStone::Init(
-	int_fast8_t _ownerPlayer,
-	int_fast8_t _col,
+	int _ownerPlayer,
+	int _col,
 	bool _reverse)
 {
 	if (!Node::init())
