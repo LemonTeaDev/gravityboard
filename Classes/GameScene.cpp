@@ -1,5 +1,6 @@
 #include "PCH.h"
 #include "GameScene.h"
+#include "GameMgr.h"
 
 USING_NS_CC;
 
@@ -46,6 +47,9 @@ bool GameScene::init()
 	// add sprites to the scene
 	this->addChild(goalCollisionBox);
 
+	// start game
+	g_GameMgr.StartGame();
+
     return true;
 }
 
@@ -56,4 +60,9 @@ void GameScene::menuCloseCallback(Ref* pSender)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
+}
+
+void GameScene::RegisterTouchHandler()
+{
+
 }

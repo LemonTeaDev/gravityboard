@@ -8,6 +8,7 @@ private:
 	typedef std::map<int_fast8_t, int_fast8_t> CardMap;
 	typedef std::map<int_fast8_t, CardMap> PlayerCardMap;
 	typedef std::map<int_fast8_t, int_fast32_t> PlayerScoreMap;
+	typedef std::map<int_fast8_t, bool> PlayerReverseUsedMap;
 
 public:
 	enum GameMode
@@ -22,7 +23,8 @@ public:
 public:
 	GameMgr();
 
-	void Init(GameMode mode);
+	void StartGame();
+	void EndGame();
 
 	int_fast8_t GetCurrentCastPlayer();
 	int_fast8_t GetCurrentTurnStarter();
@@ -34,12 +36,18 @@ public:
 	
 	bool IsTeamMember(int_fast8_t playerIdx1, int_fast8_t playerIdx2);
 
+	GameMode reservedGameMode;	// can change in title screen
+
+public:
+	bool reverseClicked;
+
 private:
 	int_fast8_t numPlayers;
 	int_fast8_t currentTurnStarter;
 	int_fast8_t currentCastPlayer;
 	PlayerCardMap playerCardMap;
 	PlayerScoreMap playerScoreMap;
+	PlayerReverseUsedMap playerReverseUsedMap;
 	GameMode gameMode;
 };
 
