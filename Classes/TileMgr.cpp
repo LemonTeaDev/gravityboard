@@ -94,7 +94,7 @@ bool TileMgr::CreateTilesEvenRows(const cc::Point& tileOrigin)
 			Size tileSize = tile->getContentSize();
 			float posX = tileOrigin.x + tileSize.width * colIdx;
 			float posY = tileOrigin.y + tileSize.height * (numHalfRows - rowIdx - 1);
-			PostTileCreate(tile, posX, posY, colIdx, rowIdx);
+			PostTileCreate(tile, posX, posY, colIdx);
 			spriteLine.push_back(tile);
 		}
 		tiles.push_back(spriteLine);
@@ -110,7 +110,7 @@ bool TileMgr::CreateTilesEvenRows(const cc::Point& tileOrigin)
 			Size tileSize = tile->getContentSize();
 			float posX = tileOrigin.x + tileSize.width * colIdx;
 			float posY = tileOrigin.y - tileSize.height * (numRows - rowIdx);
-			PostTileCreate(tile, posX, posY, colIdx, rowIdx);
+			PostTileCreate(tile, posX, posY, colIdx);
 			spriteLine.push_back(tile);
 		}
 		tiles.push_back(spriteLine);
@@ -132,7 +132,7 @@ bool TileMgr::CreateTilesOddRows(const Point& tileOrigin)
 			Size tileSize = tile->getContentSize();
 			float posX = tileOrigin.x + tileSize.width * colIdx;
 			float posY = tileOrigin.y + tileSize.height * (numHalfRows - rowIdx - 1) + tileSize.height / 2;
-			PostTileCreate(tile, posX, posY, colIdx, rowIdx);
+			PostTileCreate(tile, posX, posY, colIdx);
 			spriteLine.push_back(tile);
 		}
 		tiles.push_back(spriteLine);
@@ -147,7 +147,7 @@ bool TileMgr::CreateTilesOddRows(const Point& tileOrigin)
 			Size tileSize = tile->getContentSize();
 			float posX = tileOrigin.x + tileSize.width * colIdx;
 			float posY = tileOrigin.y - tileSize.height / 2;
-			PostTileCreate(tile, posX, posY, colIdx, numHalfRows+1);
+			PostTileCreate(tile, posX, posY, colIdx);
 			spriteLine.push_back(tile);
 		}
 		tiles.push_back(spriteLine);
@@ -163,7 +163,7 @@ bool TileMgr::CreateTilesOddRows(const Point& tileOrigin)
 			Size tileSize = tile->getContentSize();
 			float posX = tileOrigin.x + tileSize.width * colIdx;
 			float posY = tileOrigin.y - tileSize.height * (numRows - rowIdx) - tileSize.height / 2;
-			PostTileCreate(tile, posX, posY, colIdx, rowIdx);
+			PostTileCreate(tile, posX, posY, colIdx);
 			spriteLine.push_back(tile);
 		}
 		tiles.push_back(spriteLine);
@@ -190,15 +190,14 @@ void TileMgr::PostTileCreate(
 	Sprite* tile, 
 	float posX, 
 	float posY, 
-	int_fast8_t colIdx,
-	int_fast8_t rowIdx)
+	int_fast8_t colIdx)
 {
 	if (tile != nullptr)
 	{
 		tile->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
 		tile->setPosition(posX, posY);
 		bgLayer->addChild(tile, TILE_Z);
-		tile->setTag(colIdx + rowIdx * GetNumCols());
+		tile->setTag(colIdx);
 		if (colIdx < 1)
 		{
 			return;
