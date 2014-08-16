@@ -265,6 +265,13 @@ void GameMgr::UpdateCardInfo()
 	}
 }
 
+void GameMgr::UpdatePlayerCard(int playerIdx, int colIdx)
+{
+	playerCardMap[playerIdx][colIdx]--;
+
+//	CC_ASSERT(playerCardMap[playerIdx][colIdx] >= 0, "One of the remaining cards just became negative!");
+}
+
 void GameMgr::UpdateScoreBoard()
 {
 	if (gameScene == nullptr) { return; }
@@ -302,6 +309,15 @@ int GameMgr::GetCardScore(int cardIdx)
 int GameMgr::GetNumPlayers() const
 {
 	return numPlayers;
+}
+
+bool GameMgr::CanPlaceInColumn(int playerIdx, int colIdx)
+{
+	if (playerCardMap[playerIdx][colIdx]) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 bool GameMgr::CanMakeMove(int playerIdx)

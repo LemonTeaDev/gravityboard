@@ -246,6 +246,11 @@ void TileMgr::PostTileCreate(
 			PlayStone* playStone = PlayStone::create(player, colIdx, reverseClicked);
 
 			auto tilePos = tile->getPosition();
+			if (!g_GameMgr.CanPlaceInColumn(playStone->GetOwnerPlayer(), playStone->GetScore()))
+			{
+				return;
+			}
+
 			if (reverseClicked)
 			{
 				reverseClicked = false;
@@ -253,6 +258,7 @@ void TileMgr::PostTileCreate(
 			playStone->setAnchorPoint(Point::ANCHOR_MIDDLE);
 			tile->addChild(playStone);
 			
+			g_GameMgr.UpdatePlayerCard(playStone->GetOwnerPlayer(), playStone->GetScore());
 			g_GameMgr.OnPlayerCast();
 		};
 
