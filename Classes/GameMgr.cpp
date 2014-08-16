@@ -98,13 +98,13 @@ void GameMgr::EndGame()
 }
 
 void GameMgr::LoadSettings(LPCWSTR modeName) {
-	if (gameMode == 1 || gameMode == 3) {
+	if (gameMode == ffa3 || gameMode == ffa3s) {
 		numPlayers = GetPrivateProfileInt(modeName, L"Players", 3, L"gravity.ini");
 	} else {
 		numPlayers = GetPrivateProfileInt(modeName, L"Players", 4, L"gravity.ini");
 	}
 
-	if (gameMode == 1 || gameMode == 3) {
+	if (gameMode == ffa3 || gameMode == ffa3s) {
 		boardWidth = GetPrivateProfileInt(modeName, L"Width", 2, L"gravity.ini");
 	} else {
 		boardWidth = GetPrivateProfileInt(modeName, L"Width", 3, L"gravity.ini");
@@ -113,7 +113,7 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 	turns = 0;
 
 	int_fast8_t buffer;
-	if (gameMode == 3 || gameMode == 4) {
+	if (gameMode == ffa3s || gameMode == ffa4s) {
 		buffer = GetPrivateProfileInt(modeName, L"CardPoints", 123456, L"gravity.ini");
 	} else {
 		buffer = GetPrivateProfileInt(modeName, L"CardPoints", 111111, L"gravity.ini");
