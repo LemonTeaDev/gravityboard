@@ -18,8 +18,8 @@ bool TileMgr::Init(
 	cc::Layer* _bgLayer,
 	Point _goalPosition,
 	Size _goalSize,
-	int_fast8_t _numRows /*= DEFAULT_NUM_ROWS */,
-	int_fast8_t _numCols /*= DEFAULT_NUM_COLS */)
+	int _numRows /*= DEFAULT_NUM_ROWS */,
+	int _numCols /*= DEFAULT_NUM_COLS */)
 {
 	isTileCreated = false;
 
@@ -82,13 +82,13 @@ bool TileMgr::CreateTiles()
 
 bool TileMgr::CreateTilesEvenRows(const cc::Point& tileOrigin)
 {
-	int_fast8_t numHalfRows = numRows / 2;
+	int numHalfRows = numRows / 2;
 
 	// fill upper half
-	for (int_fast8_t rowIdx = 0; rowIdx < numHalfRows; ++rowIdx)
+	for (int rowIdx = 0; rowIdx < numHalfRows; ++rowIdx)
 	{
 		SpriteVec spriteLine;
-		for (int_fast8_t colIdx = 0; colIdx < numCols; ++colIdx)
+		for (int colIdx = 0; colIdx < numCols; ++colIdx)
 		{
 			Sprite* tile = Sprite::create("tile.png");
 			Size tileSize = tile->getContentSize();
@@ -101,10 +101,10 @@ bool TileMgr::CreateTilesEvenRows(const cc::Point& tileOrigin)
 	}
 
 	// fill lower half
-	for (int_fast8_t rowIdx = numHalfRows; rowIdx < numRows; ++rowIdx)
+	for (int rowIdx = numHalfRows; rowIdx < numRows; ++rowIdx)
 	{
 		SpriteVec spriteLine;
-		for (int_fast8_t colIdx = 0; colIdx < numCols; ++colIdx)
+		for (int colIdx = 0; colIdx < numCols; ++colIdx)
 		{
 			Sprite* tile = Sprite::create("tile.png");
 			Size tileSize = tile->getContentSize();
@@ -120,13 +120,13 @@ bool TileMgr::CreateTilesEvenRows(const cc::Point& tileOrigin)
 
 bool TileMgr::CreateTilesOddRows(const Point& tileOrigin)
 {
-	int_fast8_t numHalfRows = numRows / 2;
+	int numHalfRows = numRows / 2;
 
 	// fill upper half
-	for (int_fast8_t rowIdx = 0; rowIdx < numHalfRows; ++rowIdx)
+	for (int rowIdx = 0; rowIdx < numHalfRows; ++rowIdx)
 	{
 		SpriteVec spriteLine;
-		for (int_fast8_t colIdx = 0; colIdx < numCols; ++colIdx)
+		for (int colIdx = 0; colIdx < numCols; ++colIdx)
 		{
 			Sprite* tile = Sprite::create("tile.png");
 			Size tileSize = tile->getContentSize();
@@ -141,7 +141,7 @@ bool TileMgr::CreateTilesOddRows(const Point& tileOrigin)
 	// fill mid
 	{
 		SpriteVec spriteLine;
-		for (int_fast8_t colIdx = 0; colIdx < numCols; ++colIdx)
+		for (int colIdx = 0; colIdx < numCols; ++colIdx)
 		{
 			Sprite* tile = Sprite::create("tile.png");
 			Size tileSize = tile->getContentSize();
@@ -154,10 +154,10 @@ bool TileMgr::CreateTilesOddRows(const Point& tileOrigin)
 	}
 
 	// fill lower half
-	for (int_fast8_t rowIdx = numHalfRows + 1; rowIdx < numRows; ++rowIdx)
+	for (int rowIdx = numHalfRows + 1; rowIdx < numRows; ++rowIdx)
 	{
 		SpriteVec spriteLine;
-		for (int_fast8_t colIdx = 0; colIdx < numCols; ++colIdx)
+		for (int colIdx = 0; colIdx < numCols; ++colIdx)
 		{
 			Sprite* tile = Sprite::create("tile.png");
 			Size tileSize = tile->getContentSize();
@@ -176,12 +176,12 @@ const TileMgr::SpriteVec2D& TileMgr::GetTiles() const
 	return tiles;
 }
 
-int_fast8_t TileMgr::GetNumRows() const
+int TileMgr::GetNumRows() const
 {
 	return numRows;
 }
 
-int_fast8_t TileMgr::GetNumCols() const
+int TileMgr::GetNumCols() const
 {
 	return numCols;
 }
@@ -190,7 +190,7 @@ void TileMgr::PostTileCreate(
 	Sprite* tile, 
 	float posX, 
 	float posY, 
-	int_fast8_t colIdx)
+	int colIdx)
 {
 	if (tile != nullptr)
 	{

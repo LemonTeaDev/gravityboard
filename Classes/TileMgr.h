@@ -5,8 +5,8 @@ class TileMgr
 private:
 	typedef std::vector<cc::Sprite*> SpriteVec;
 	typedef std::vector<SpriteVec> SpriteVec2D;
-	static const int_fast8_t DEFAULT_NUM_ROWS = 3;
-	static const int_fast8_t DEFAULT_NUM_COLS = 7;
+	static const int DEFAULT_NUM_ROWS = 3;
+	static const int DEFAULT_NUM_COLS = 7;
 	static const int TILE_Z = 1;
 
 public:
@@ -16,8 +16,8 @@ public:
 		cc::Layer* _bgLayer,
 		cc::Point _goalPosition,
 		cc::Size _goalSize,
-		int_fast8_t _numRows = DEFAULT_NUM_ROWS,
-		int_fast8_t _numCols = DEFAULT_NUM_COLS);
+		int _numRows = DEFAULT_NUM_ROWS,
+		int _numCols = DEFAULT_NUM_COLS);
 
 	bool CreateTiles();
 	bool CreateTilesEvenRows(const cc::Point& origin);
@@ -25,19 +25,19 @@ public:
 	void PostTileCreate(cc::Sprite* tile,
 						float posX,
 						float posY,
-						int_fast8_t colIdx);
+						int colIdx);
 
 	const SpriteVec2D& GetTiles() const;
 
-	int_fast8_t GetNumRows() const;
-	int_fast8_t GetNumCols() const;
+	int GetNumRows() const;
+	int GetNumCols() const;
 
 private:
 	cc::Layer* bgLayer;
 	cc::Point ndmMouthPosition;
 	cc::Size goalSize;
-	int_fast8_t numRows;
-	int_fast8_t numCols;
+	int numRows;
+	int numCols;
 	SpriteVec2D tiles;
 
 	bool isInitialized;

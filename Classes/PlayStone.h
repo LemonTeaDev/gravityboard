@@ -4,20 +4,20 @@ class PlayStone : public cc::Node
 {
 public:
 	static PlayStone* create(
-		int_fast8_t _ownerPlayer,
-		int_fast8_t _col,
+		int _ownerPlayer,
+		int _col,
 		bool _reverse);
 	bool Init(
-		int_fast8_t _ownerPlayer, 
-		int_fast8_t _col, 
+		int _ownerPlayer, 
+		int _col, 
 		bool _reverse);
 	bool IsReverse() const;
-	int_fast32_t GetScore() const;
-	int_fast8_t GetOwnerPlayer() const;
+	int GetScore() const;
+	int GetOwnerPlayer() const;
 
 private:
 	bool isReverse;
-	int_fast8_t ownerPlayer;
-	int_fast8_t colPos;
+	int ownerPlayer;
+	int colPos;
 	cc::Sprite* sprite;
 };
