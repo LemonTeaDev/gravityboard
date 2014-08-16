@@ -98,19 +98,31 @@ void GameMgr::EndGame()
 }
 
 void GameMgr::LoadSettings(LPCWSTR modeName) {
-	numPlayers = GetPrivateProfileInt(modeName, L"Players", 4, L"settings.ini");
+	if (gameMode == 1 || gameMode == 3) {
+		numPlayers = GetPrivateProfileInt(modeName, L"Players", 3, L"gravity.ini");
+	} else {
+		numPlayers = GetPrivateProfileInt(modeName, L"Players", 4, L"gravity.ini");
+	}
 
-	boardLength = GetPrivateProfileInt(modeName, L"Length", 6, L"settings.ini");;
-	boardWidth = GetPrivateProfileInt(modeName, L"Width", 3, L"settings.ini");
+	if (gameMode == 1 || gameMode == 3) {
+		boardWidth = GetPrivateProfileInt(modeName, L"Width", 2, L"gravity.ini");
+	} else {
+		boardWidth = GetPrivateProfileInt(modeName, L"Width", 3, L"gravity.ini");
+	}
+	boardLength = GetPrivateProfileInt(modeName, L"Length", 6, L"gravity.ini");;
 	turns = 0;
 
 	int_fast8_t buffer;
-	buffer = GetPrivateProfileInt(modeName, L"CardPoints", 111111, L"settings.ini");
+	if (gameMode == 3 || gameMode == 4) {
+		buffer = GetPrivateProfileInt(modeName, L"CardPoints", 123456, L"gravity.ini");
+	} else {
+		buffer = GetPrivateProfileInt(modeName, L"CardPoints", 111111, L"gravity.ini");
+	}
 	for (int i = boardLength; i >= 1; i--) {
 		cardPoints[i] = buffer % 10;
 		buffer /= 10;
 	}
-	GetPrivateProfileInt(L"Custom", L"CardMap", buffer, L"settings.ini");
+	GetPrivateProfileInt(L"Custom", L"CardMap", buffer, L"gravity.ini");
 	CardMap cardMap;
 	for (int i = boardLength; i >= 1; i--) {
 		cardMap[i] = buffer % 10;
@@ -141,7 +153,7 @@ int_fast8_t GameMgr::GetCurrentTurnStarter()
 
 void GameMgr::OnTurnEnd()
 {
-	// Á¤»ê here
+	(gameScene->GetTileMgr()).GetTiles();
 
 	currentTurnStarter = (currentTurnStarter + 1) % numPlayers;
 	currentCastPlayer += currentTurnStarter;

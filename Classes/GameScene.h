@@ -40,6 +40,11 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(GameScene);
 
+public:
+	TileMgr GetTileMgr() {
+		return tileMgr;
+	}
+
 private:
 	void RegisterTouchHandler();
 
