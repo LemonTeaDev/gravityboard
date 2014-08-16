@@ -9,7 +9,11 @@ private:
 	static const int NDM_Z = 2;
 	static const int NDM_MOUTH_Z = 3;
 
-public:
+	static const int BOARD_Z = 2;
+	static const int BOARD_CONTENT_Z = 3;
+
+	static const int SKIP_MENU_Z = 2;
+
 	static const int PLAYER_1_SCORE_ICON_TAG = 101;
 	static const int PLAYER_2_SCORE_ICON_TAG = 102;
 	static const int PLAYER_3_SCORE_ICON_TAG = 103;
@@ -18,8 +22,8 @@ public:
 	static const int PLAYER_2_SCORE_LABEL_TAG = 152;
 	static const int PLAYER_3_SCORE_LABEL_TAG = 153;
 	static const int PLAYER_4_SCORE_LABEL_TAG = 154;
-
 	static const int INFO_LABEL_TAG = 201;
+	static const int REVERSE_BUTTON_TAG = 301;
 
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
@@ -35,12 +39,18 @@ public:
     CREATE_FUNC(GameScene);
 
 public:
-	TileMgr GetTileMgr() {
+	TileMgr& GetTileMgr() 
+	{
 		return tileMgr;
 	}
 
+	void UpdateScoreBoard();
+	void UpdateCardInfo();
+	void UpdateReverseButton();
+
 private:
 	void RegisterTouchHandler();
+	void CreateReverseButton();
 
 private:
 	TileMgr tileMgr;

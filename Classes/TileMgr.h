@@ -32,6 +32,8 @@ public:
 	int GetNumRows() const;
 	int GetNumCols() const;
 
+	void CheckSkip();
+
 private:
 	cc::Layer* bgLayer;
 	cc::Point ndmMouthPosition;

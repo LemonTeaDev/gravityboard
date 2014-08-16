@@ -5,9 +5,6 @@
 class GameMgr
 {
 private:
-	const int BOARD_Z = 2;
-	const int BOARD_CONTENT_Z = 3;
-
 	const int DEFAULT_NUM_PLAYERS = 4;
 	typedef std::map<int, int> CardMap;
 	typedef std::map<int, CardMap> PlayerCardMap;
@@ -33,23 +30,24 @@ public:
 
 	int GetCurrentCastPlayer();
 	int GetCurrentTurnStarter();
+	int GetNumPlayers() const;
 
 	void OnPlayerCast();
 	void OnTurnEnd();
 
 	GameMode GetGameMode() const;
-	
-	bool IsTeamMember(int playerIdx1, int playerIdx2);
-
 	GameMode reservedGameMode;	// can change in title screen
 
+	int GetPlayerScore(int playerIdx);
 	std::string GetPlayerScoreString(int playerIdx);
 	std::string GetCardInfoString();
-	void UpdateScoreBoard();
-	void UpdateCardInfo();
+	void UpdatePlayerCard(int playerIdx, int colIdx);
+
+	bool IsReverseUsed(int playerIdx);
 	
 	int GetCardScore(int cardIdx);
 
+	bool CanPlaceInColumn(int playerIdx, int colIdx);
 	bool CanMakeMove(int playerIdx);
 
 public:
