@@ -1,5 +1,6 @@
 #pragma once
 #include "Singleton.hpp"
+#include "GameScene.h"
 
 class GameMgr
 {
@@ -25,7 +26,7 @@ public:
 public:
 	GameMgr();
 
-	void StartGame();
+	void StartGame(GameScene* gameScene);
 	void EndGame();
 
 	int_fast8_t GetCurrentCastPlayer();
@@ -55,6 +56,7 @@ private:
 	PlayerScoreMap playerScoreMap;
 	PlayerReverseUsedMap playerReverseUsedMap;
 	GameMode gameMode;
+	GameScene* gameScene;
 
 	void LoadSettings(LPCWSTR modeName);
 };

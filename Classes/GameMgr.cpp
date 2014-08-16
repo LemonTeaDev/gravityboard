@@ -1,5 +1,6 @@
 #include "PCH.h"
 #include "GameMgr.h"
+#include "GameScene.h"
 
 Singleton<GameMgr> _g_GameMgr;
 
@@ -13,8 +14,9 @@ GameMgr::GameMgr()
 {
 }
 
-void GameMgr::StartGame()
+void GameMgr::StartGame(GameScene* _gameScene)
 {
+	gameScene = _gameScene;
 	gameMode = reservedGameMode;	
 	switch (gameMode)
 	{
@@ -53,11 +55,17 @@ void GameMgr::StartGame()
 	{
 		playerReverseUsedMap[i] = false;
 	}
+
+
+
 }
 
 void GameMgr::EndGame()
 {
-	// TODO
+	gameScene = nullptr;
+	playerCardMap.clear();
+	playerReverseUsedMap.clear();
+	reservedGameMode = none;
 }
 
 void GameMgr::LoadSettings(LPCWSTR modeName) {
@@ -89,6 +97,7 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 	std::random_device randomDev;
 	auto dist = std::uniform_int_distribution<int>(1, numPlayers);
 	currentTurnStarter = dist(randomDev);
+	currentCastPlayer = currentTurnStarter;
 }
 
 int_fast8_t GameMgr::GetCurrentCastPlayer()
@@ -114,7 +123,7 @@ void GameMgr::OnPlayerCast()
 	--currentCastPlayer;
 	if (currentCastPlayer < 0)
 	{
-		currentCastPlayer = numPlayers - 1;
+		currentCastPlayer += numPlayers;
 	}
 }
 

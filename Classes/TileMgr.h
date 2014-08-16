@@ -25,7 +25,8 @@ public:
 	void PostTileCreate(cc::Sprite* tile,
 						float posX,
 						float posY,
-						int_fast8_t colIdx);
+						int_fast8_t colIdx,
+						int_fast8_t rowIdx);
 
 	const SpriteVec2D& GetTiles() const;
 
