@@ -197,13 +197,15 @@ bool GameScene::init()
 	this->addChild(board, BOARD_Z);
 
 	// add menu
-	auto reverseButton = MenuItemImage::create(
+	MenuItemImage* reverseButton = MenuItemImage::create(
 		"reverseHairbandOff.png",
 		"reverseHairbandOn.png",
 		[&](Ref *sender) {
 			if (g_GameMgr.CanMakeMove(g_GameMgr.GetCurrentCastPlayer()))
 			{
 				g_GameMgr.reverseClicked = true;
+				g_GameMgr.UseReverse(g_GameMgr.GetCurrentCastPlayer());
+				UpdateReverseButton();
 			}
 			else
 			{
@@ -212,11 +214,13 @@ bool GameScene::init()
 			}
 		});
 
+	reverseButton->setTag(REVERSE_BUTTON_TAG);
 	reverseButton->setPosition(Vec2(origin.x + 250, origin.y + visibleSize.height * 0.8));
 
 	// create menu, it's an autorelease object
 	auto menu = Menu::create(reverseButton, NULL);
 	menu->setPosition(Vec2::ZERO);
+	menu->setTag(REVERSE_MENU_TAG);
 	this->addChild(menu, SKIP_MENU_Z);
 
 
@@ -262,7 +266,10 @@ void GameScene::UpdateCardInfo()
 
 void GameScene::UpdateReverseButton()
 {
-	auto reverseBtn = getChildByTag(REVERSE_BUTTON_TAG);
+	auto menu = getChildByTag(REVERSE_MENU_TAG);
+	if (menu == nullptr) { return; }
+
+	auto reverseBtn = menu->getChildByTag(REVERSE_BUTTON_TAG);
 	if (reverseBtn == nullptr)
 	{
 		return;

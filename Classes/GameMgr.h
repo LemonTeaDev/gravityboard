@@ -43,6 +43,7 @@ public:
 	std::string GetCardInfoString();
 	void UpdatePlayerCard(int playerIdx, int colIdx);
 
+	void UseReverse(int playerIdx);
 	bool IsReverseUsed(int playerIdx);
 	
 	int GetCardScore(int cardIdx);

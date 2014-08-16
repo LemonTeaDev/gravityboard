@@ -227,6 +227,11 @@ GameMgr::GameMode GameMgr::GetGameMode() const
 	return gameMode;
 }
 
+void GameMgr::UseReverse(int playerIdx)
+{
+	playerReverseUsedMap[playerIdx] = true;
+}
+
 bool GameMgr::IsReverseUsed(int playerIdx)
 {
 	return playerReverseUsedMap[playerIdx];
