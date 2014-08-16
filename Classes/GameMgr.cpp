@@ -64,7 +64,7 @@ void GameMgr::StartGame(GameScene* _gameScene)
 	p1Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
 	gameScene->addChild(p1Icon, BOARD_CONTENT_Z);
 
-	LabelTTF* p1Score = LabelTTF::create("00", "Arial", 32);
+	LabelTTF* p1Score = LabelTTF::create(GetPlayerScoreString(1), "Arial", 32);
 	p1Score->setColor(Color3B(0, 0, 0));
 	p1Score->setTag(GameScene::PLAYER_1_SCORE_LABEL_TAG);
 	p1Score->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
@@ -75,7 +75,7 @@ void GameMgr::StartGame(GameScene* _gameScene)
 	p2Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
 	gameScene->addChild(p2Icon, BOARD_CONTENT_Z);
 
-	LabelTTF* p2Score = LabelTTF::create("00", "Arial", 32);
+	LabelTTF* p2Score = LabelTTF::create(GetPlayerScoreString(2), "Arial", 32);
 	p2Score->setColor(Color3B(0, 0, 0));
 	p2Score->setTag(GameScene::PLAYER_2_SCORE_LABEL_TAG);
 	p2Score->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
@@ -86,7 +86,7 @@ void GameMgr::StartGame(GameScene* _gameScene)
 	p3Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
 	gameScene->addChild(p3Icon, BOARD_CONTENT_Z);
 
-	LabelTTF* p3Score = LabelTTF::create("00", "Arial", 32);
+	LabelTTF* p3Score = LabelTTF::create(GetPlayerScoreString(3), "Arial", 32);
 	p3Score->setColor(Color3B(0, 0, 0));
 	p3Score->setTag(GameScene::PLAYER_3_SCORE_LABEL_TAG);
 	p3Score->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
@@ -101,7 +101,7 @@ void GameMgr::StartGame(GameScene* _gameScene)
 		p4Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
 		gameScene->addChild(p4Icon, BOARD_CONTENT_Z);
 
-		p4Score = LabelTTF::create("00", "Arial", 32);
+		p4Score = LabelTTF::create(GetPlayerScoreString(4), "Arial", 32);
 		p4Score->setColor(Color3B(0, 0, 0));
 		p4Score->setTag(GameScene::PLAYER_4_SCORE_LABEL_TAG);
 		p4Score->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
@@ -179,7 +179,7 @@ void GameMgr::StartGame(GameScene* _gameScene)
 	{	// other info line setting
 		float endX = origin.x + visibleSize.width;
 		float infoY = origin.y + visibleSize.height - p3Score->getContentSize().height - 120;
-		LabelTTF* infoLabel = LabelTTF::create(GetGameInfoString(), "Arial", 26);
+		LabelTTF* infoLabel = LabelTTF::create(GetCardInfoString(), "Arial", 26);
 		infoLabel->setColor(Color3B(0, 0, 0));
 		infoLabel->setTag(GameScene::INFO_LABEL_TAG);
 		infoLabel->setPosition(endX - infoLabel->getContentSize().width - 35, infoY);
@@ -261,6 +261,9 @@ void GameMgr::OnTurnEnd()
 
 	currentTurnStarter = (currentTurnStarter + 1) % numPlayers;
 	currentCastPlayer += currentTurnStarter;
+
+	UpdateScoreBoard();
+	UpdateCardInfo();
 }
 
 void GameMgr::OnPlayerCast()
@@ -270,6 +273,8 @@ void GameMgr::OnPlayerCast()
 	{
 		currentCastPlayer += numPlayers;
 	}
+
+	UpdateCardInfo();
 }
 
 GameMgr::GameMode GameMgr::GetGameMode() const
@@ -282,7 +287,7 @@ std::string GameMgr::GetPlayerScoreString(int playerIdx)
 	return std::to_string(playerScoreMap[playerIdx]);
 }
 
-std::string GameMgr::GetGameInfoString()
+std::string GameMgr::GetCardInfoString()
 {
 	std::string gameInfoStr = "[" + std::to_string(currentCastPlayer) + "P Turn]  ";
 	for (int i = 1; i <= boardLength; ++i)
@@ -299,7 +304,40 @@ std::string GameMgr::GetGameInfoString()
 	return gameInfoStr;
 }
 
+void GameMgr::UpdateCardInfo()
+{
+	auto infoLabel = dynamic_cast<LabelTTF*>(gameScene->getChildByTag(GameScene::INFO_LABEL_TAG));
+	if (infoLabel != nullptr)
+	{
+		infoLabel->setString(GetCardInfoString());
+	}
+}
+
 void GameMgr::UpdateScoreBoard()
 {
+	if (gameScene == nullptr) { return; }
+	auto score1 = dynamic_cast<LabelTTF*>(gameScene->getChildByTag(GameScene::PLAYER_1_SCORE_LABEL_TAG));
+	auto score2 = dynamic_cast<LabelTTF*>(gameScene->getChildByTag(GameScene::PLAYER_2_SCORE_LABEL_TAG));
+	auto score3 = dynamic_cast<LabelTTF*>(gameScene->getChildByTag(GameScene::PLAYER_3_SCORE_LABEL_TAG));
+	auto score4 = dynamic_cast<LabelTTF*>(gameScene->getChildByTag(GameScene::PLAYER_4_SCORE_LABEL_TAG));
 
+	if (score1 != nullptr)
+	{
+		score1->setString(GetPlayerScoreString(1));
+	}
+
+	if (score2 != nullptr)
+	{
+		score2->setString(GetPlayerScoreString(2));
+	}
+
+	if (score3 != nullptr)
+	{
+		score3->setString(GetPlayerScoreString(3));
+	}
+
+	if (score4 != nullptr)
+	{
+		score4->setString(GetPlayerScoreString(4));
+	}
 }

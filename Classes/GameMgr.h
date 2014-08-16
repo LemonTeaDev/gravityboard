@@ -44,8 +44,9 @@ public:
 	GameMode reservedGameMode;	// can change in title screen
 
 	std::string GetPlayerScoreString(int playerIdx);
-	std::string GetGameInfoString();
+	std::string GetCardInfoString();
 	void UpdateScoreBoard();
+	void UpdateCardInfo();
 
 public:
 	bool reverseClicked;
