@@ -30,7 +30,7 @@ bool TileMgr::Init(
 	}
 
 	bgLayer = _bgLayer;
-	goalPosition = _goalPosition;
+	ndmMouthPosition = _goalPosition;
 	goalSize = _goalSize;
 	numRows = _numRows;
 	numCols = _numCols;
@@ -63,7 +63,9 @@ bool TileMgr::CreateTiles()
 	// assume goalBox anchorpoint is 0, 0.5f
 	// coord align differs when #row is odd or even
 	bool isEven = (numRows % 2 == 0);
-	cc::Point tileOrigin = Vec2(goalPosition.x + goalSize.width, goalPosition.y);
+	cc::Point tileOrigin = Vec2(
+		ndmMouthPosition.x + goalSize.width - 50, 
+		ndmMouthPosition.y);
 
 	bool createResult = false;
 	if (isEven)

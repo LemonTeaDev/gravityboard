@@ -5,6 +5,10 @@
 
 class GameScene : public cocos2d::Layer
 {
+private:
+	static const int NDM_Z = 2;
+	static const int NDM_MOUTH_Z = 3;
+
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cc::Scene* createScene();

@@ -32,20 +32,26 @@ bool GameScene::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
-	// place collision checker for goal
-	auto goalCollisionBox = Sprite::create("goalcollisionbox.png");
-	goalCollisionBox->setAnchorPoint(Vec2(0.f, 0.5f));
-	goalCollisionBox->setPosition(Vec2(origin.x + 100, origin.y + visibleSize.height / 2));
+	// place ndmtan
+	auto ndmTan = Sprite::create("ndm_big.png");
+	ndmTan->setAnchorPoint(Vec2(0.f, 0.5f));
+	ndmTan->setPosition(Vec2(origin.x + 25, origin.y + visibleSize.height * 0.45));
+
+	// place ndmMouth
+	auto ndmMouth = Sprite::create("ndm_mouth.png");
+	ndmMouth->setAnchorPoint(Vec2(0.f, 0.5f));
+	ndmMouth->setPosition(Vec2(origin.x + 195, origin.y + visibleSize.height * 0.43));
 
 	// place tiles
 	tileMgr.Init(
 		this,
-		goalCollisionBox->getPosition(),
-		goalCollisionBox->getContentSize());
+		ndmMouth->getPosition(),
+		ndmMouth->getContentSize());
 	tileMgr.CreateTiles();
 
 	// add sprites to the scene
-	this->addChild(goalCollisionBox);
+	this->addChild(ndmTan, NDM_Z);
+	this->addChild(ndmMouth, NDM_MOUTH_Z);
 
 	// start game
 	g_GameMgr.StartGame();
