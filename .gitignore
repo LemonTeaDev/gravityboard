@@ -4,6 +4,8 @@
 *.o
 *.obj
 *.ipch
+*.pdb
+*.log
 
 # Executables
 *.exe
@@ -18,6 +20,7 @@
 *.tlog
 *.lastbuildstate
 *.idb
+*.orig
 
 # Build results
 */[Dd]ebug/
