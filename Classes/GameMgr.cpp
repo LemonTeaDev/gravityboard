@@ -13,47 +13,69 @@ GameMgr::GameMgr()
 
 void GameMgr::Init(GameMode mode)
 {
-	gameMode = mode;
-	std::random_device randomDev;
-
-	switch (gameMode)
+	switch (mode)
 	{
 		case ffa3:
 		{
-			auto dist = std::uniform_int_distribution<int>(1, 3);
-			currentTurnStarter = dist(randomDev);
-			numPlayers = 3;
+			LoadSettings(L"ffa3");
 		}
 		break;
 
 		case ffa4:
 		{
-			auto dist = std::uniform_int_distribution<int>(1, 4);
-			currentTurnStarter = dist(randomDev);
-			numPlayers = 4;
+			LoadSettings(L"ffa4");
 		}
 		break;
 
-		case pvp:
+		case ffa3s:
 		{
-			auto dist = std::uniform_int_distribution<int>(1, 2);
-			currentTurnStarter = dist(randomDev);
-			numPlayers = 2;
+			LoadSettings(L"ffa3s");
 		}
 		break;
 
-		case teampvp:
+		case ffa4s:
 		{
-			auto dist = std::uniform_int_distribution<int>(1, 2);
-			currentTurnStarter = dist(randomDev);
-			if (currentTurnStarter == 2)
-			{
-				currentTurnStarter = 3;
-			}
-			numPlayers = 4;
+			LoadSettings(L"ffa4");
+		}
+		break;
+
+		case custom:
+		{
+			LoadSettings(L"custom");
 		}
 		break;
 	}
+}
+
+void GameMgr::LoadSettings(LPCWSTR modeName) {
+	numPlayers = GetPrivateProfileInt(modeName, L"Players", 4, L"settings.ini");
+
+	boardLength = GetPrivateProfileInt(modeName, L"Length", 6, L"settings.ini");;
+	boardWidth = GetPrivateProfileInt(modeName, L"Width", 3, L"settings.ini");
+	turns = 0;
+
+	int_fast8_t buffer;
+	buffer = GetPrivateProfileInt(modeName, L"CardPoints", 111111, L"settings.ini");
+	for (int i = boardLength; i >= 1; i--) {
+		cardPoints[i] = buffer % 10;
+		buffer /= 10;
+	}
+	GetPrivateProfileInt(L"Custom", L"CardMap", buffer, L"settings.ini");
+	CardMap cardMap;
+	for (int i = boardLength; i >= 1; i--) {
+		cardMap[i] = buffer % 10;
+		buffer /= 10;
+		turns += cardMap[i];
+	}
+	
+	for (int i = 1; i <= numPlayers; i++) {
+		playerCardMap[i] = cardMap;
+		playerScoreMap[i] = 0;
+	}
+
+	std::random_device randomDev;
+	auto dist = std::uniform_int_distribution<int>(1, numPlayers);
+	currentTurnStarter = dist(randomDev);
 }
 
 int_fast8_t GameMgr::GetCurrentCastPlayer()
@@ -71,7 +93,7 @@ void GameMgr::OnTurnEnd()
 	// Á¤»ê here
 
 	currentTurnStarter = (currentTurnStarter + 1) % numPlayers;
-	currentCastPlayer = currentTurnStarter;	
+	currentCastPlayer += currentTurnStarter;
 }
 
 GameMgr::GameMode GameMgr::GetGameMode() const
