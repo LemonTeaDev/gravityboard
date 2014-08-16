@@ -1,7 +1,6 @@
 #include "PCH.h"
 #include "TitleScene.h"
 #include "GameScene.h"
-#include "base\ccTypes.h"
 
 USING_NS_CC;
 

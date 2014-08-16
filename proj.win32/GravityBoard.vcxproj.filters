@@ -42,6 +42,9 @@
     <ClCompile Include="..\Classes\PlayStone.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\ResultScene.cpp">
+      <Filter>Classes\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\PlayStone.h">
       <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ResultScene.h">
+      <Filter>Classes\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

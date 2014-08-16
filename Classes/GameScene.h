@@ -9,6 +9,11 @@ private:
 	static const int NDM_Z = 2;
 	static const int NDM_MOUTH_Z = 3;
 
+	static const int BOARD_Z = 2;
+	static const int BOARD_CONTENT_Z = 3;
+
+	static const int SKIP_MENU_Z = 2;
+
 public:
 	static const int PLAYER_1_SCORE_ICON_TAG = 101;
 	static const int PLAYER_2_SCORE_ICON_TAG = 102;
@@ -41,6 +46,7 @@ public:
 
 private:
 	void RegisterTouchHandler();
+	void CreateReverseButton();
 
 private:
 	TileMgr tileMgr;
