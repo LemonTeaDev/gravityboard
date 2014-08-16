@@ -41,11 +41,13 @@ public:
 	int GetPlayerScore(int playerIdx);
 	std::string GetPlayerScoreString(int playerIdx);
 	std::string GetCardInfoString();
+	void UpdatePlayerCard(int playerIdx, int colIdx);
 
 	bool IsReverseUsed(int playerIdx);
 	
 	int GetCardScore(int cardIdx);
 
+	bool CanPlaceInColumn(int playerIdx, int colIdx);
 	bool CanMakeMove(int playerIdx);
 
 public:
