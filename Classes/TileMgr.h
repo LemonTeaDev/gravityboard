@@ -5,7 +5,7 @@ class TileMgr
 private:
 	typedef std::vector<cc::Sprite*> SpriteVec;
 	typedef std::vector<SpriteVec> SpriteVec2D;
-	static const int_fast8_t DEFAULT_NUM_ROWS = 4;
+	static const int_fast8_t DEFAULT_NUM_ROWS = 3;
 	static const int_fast8_t DEFAULT_NUM_COLS = 7;
 	static const int TILE_Z = 1;
 
@@ -25,8 +25,7 @@ public:
 	void PostTileCreate(cc::Sprite* tile,
 						float posX,
 						float posY,
-						int_fast8_t colIdx,
-						int_fast8_t rowIdx);
+						int_fast8_t colIdx);
 
 	const SpriteVec2D& GetTiles() const;
 

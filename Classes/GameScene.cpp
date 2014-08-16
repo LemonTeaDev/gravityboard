@@ -31,6 +31,10 @@ bool GameScene::init()
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	// place background
+	auto bgImage = Sprite::create("background.png");
+	bgImage->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
     
 	// place ndmtan
 	auto ndmTan = Sprite::create("ndm_big.png");
@@ -50,6 +54,7 @@ bool GameScene::init()
 	tileMgr.CreateTiles();
 
 	// add sprites to the scene
+	this->addChild(bgImage, 0);
 	this->addChild(ndmTan, NDM_Z);
 	this->addChild(ndmMouth, NDM_MOUTH_Z);
 
