@@ -235,6 +235,8 @@ void TileMgr::PostTileCreate(
 			}
 			playStone->setAnchorPoint(Point::ANCHOR_MIDDLE);
 			tile->addChild(playStone);
+
+			g_GameMgr.OnPlayerCast();
 		};
 
 		Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, tile);

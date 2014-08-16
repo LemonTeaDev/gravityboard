@@ -1,6 +1,8 @@
 #include "PCH.h"
 #include "GameMgr.h"
 #include "GameScene.h"
+#include "PlayStone.h"
+#include "TitleScene.h"
 
 Singleton<GameMgr> _g_GameMgr;
 
@@ -212,7 +214,7 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 		boardWidth = GetPrivateProfileInt(modeName, L"Width", 3, L"gravity.ini");
 	}
 	boardLength = GetPrivateProfileInt(modeName, L"Length", 6, L"gravity.ini");;
-	turns = 0;
+	maxTurns = 0;
 
 	int buffer;
 	if (gameMode == ffa3s || gameMode == ffa4s) {
@@ -229,8 +231,9 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 	for (int i = boardLength; i >= 1; i--) {
 		cardMap[i] = buffer % 10;
 		buffer /= 10;
-		turns += cardMap[i];
+		maxTurns += cardMap[i];
 	}
+	turnsLeft = maxTurns;
 	
 	for (int i = 1; i <= numPlayers; i++) {
 		for (int j = 1; j <= boardLength; j++) {
@@ -261,30 +264,72 @@ void GameMgr::OnTurnEnd()
 		std::map<int, int> gravity; // magnitudes of gravity at each position
 		gravity[1] = 1; // gravity at first column is always 1
 		for (int j = 2; j <= boardLength; ++j) { // record gravity magnitudes
-			gravity[j] = gravity[j - 1] + (gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount() * (reverseClicked ? -1 : 1);
+			gravity[j] = gravity[j - 1] + (gameScene->GetTileMgr()).GetTiles()[i][j-1]->getChildrenCount() 
+				* (reverseClicked ? -1 : 1);
 		}
 
 		for (int j = 1; j <= boardLength; ++j) { // move pieces
 			if ((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount()) {
-				int destination = j - gravity[j];
+				int destination = std::max(j - gravity[j], 0);
 
-				
+				auto childrenVec = gameScene->GetTileMgr().GetTiles()[i][j]->getChildren();
+				Node* spriteToMove = childrenVec.at(0);
+				spriteToMove->removeFromParentAndCleanup(false);
 
-				((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildren())[0]
-				(gameScene->GetTileMgr()).GetTiles()[i][destination]->addChild((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildByTag());
-				(gameScene->GetTileMgr()).GetTiles()[i][j]->removeAllChildren();
+				(gameScene->GetTileMgr()).GetTiles()[i][destination]->addChild(spriteToMove);
 			}
 		}
 
 		for (int j = 0; j <= boardLength; ++j) { // delete destroyed pieces and calculate points
-			if (j == 0) {
+			if (j == 0)
+			{
+				auto children = (gameScene->GetTileMgr()).GetTiles()[i][j]->getChildren();
+				for (auto child : children)
+				{
+					auto playStone = dynamic_cast<PlayStone*>(child);
+					if (playStone != nullptr)
+					{
+						// eat nom nom
+						// todo some fancy effects
+						auto stoneOwner = playStone->GetOwnerPlayer();
+						auto stoneScore = playStone->GetScore();
+						playerScoreMap[stoneOwner] += stoneScore;
+					}
 
+					if (child != nullptr)
+					{
+						child->removeFromParent();
+					}
+				}
+			}
+			else
+			{
+				// destroy crashed players
+				// todo some fancy effects
+				if ((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount() >= 2)
+				{
+					(gameScene->GetTileMgr()).GetTiles()[i][j]->removeAllChildren();
+				}
 			}
 		}
 	}
 
 	currentTurnStarter = (currentTurnStarter + 1) % numPlayers;
-	currentCastPlayer += currentTurnStarter;
+	if (currentTurnStarter == 0)
+	{
+		currentTurnStarter += numPlayers;
+	}
+
+	currentCastPlayer = currentTurnStarter;
+
+	--turnsLeft;
+	if (turnsLeft <= 0)
+	{
+		// todo Game over
+		auto titleScene = TitleScene::createScene();
+		auto transition = TransitionFade::create(1.0f, titleScene);
+		Director::getInstance()->replaceScene(transition);
+	}
 
 	UpdateScoreBoard();
 	UpdateCardInfo();
@@ -293,12 +338,17 @@ void GameMgr::OnTurnEnd()
 void GameMgr::OnPlayerCast()
 {
 	--currentCastPlayer;
-	if (currentCastPlayer < 0)
+	if (currentCastPlayer <= 0)
 	{
 		currentCastPlayer += numPlayers;
 	}
 
 	UpdateCardInfo();
+
+	if (((currentCastPlayer + numPlayers) - currentTurnStarter) % numPlayers == 0)
+	{
+		OnTurnEnd();
+	}
 }
 
 GameMgr::GameMode GameMgr::GetGameMode() const
@@ -323,7 +373,7 @@ std::string GameMgr::GetCardInfoString()
 	}
 
 	gameInfoStr += "Rotations Left: ";
-	gameInfoStr += std::to_string(turns);
+	gameInfoStr += std::to_string(turnsLeft);
 
 	return gameInfoStr;
 }
@@ -364,4 +414,9 @@ void GameMgr::UpdateScoreBoard()
 	{
 		score4->setString(GetPlayerScoreString(4));
 	}
+}
+
+int GameMgr::GetCardScore(int cardIdx)
+{
+	return cardPoints[cardIdx];
 }

@@ -47,6 +47,8 @@ public:
 	std::string GetCardInfoString();
 	void UpdateScoreBoard();
 	void UpdateCardInfo();
+	
+	int GetCardScore(int cardIdx);
 
 public:
 	bool reverseClicked;
@@ -54,12 +56,13 @@ public:
 private:
 	int numPlayers;
 	int boardWidth, boardLength;
-	int turns;
-	CardScoreMap cardPoints;
+	int maxTurns;
+	int turnsLeft;
 
 	int currentTurnStarter;
 	int currentCastPlayer;
 	PlayerCardMap playerCardMap;
+	CardScoreMap cardPoints;
 	PlayerScoreMap playerScoreMap;
 	PlayerReverseUsedMap playerReverseUsedMap;
 	GameMode gameMode;
