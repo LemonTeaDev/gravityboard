@@ -1,3 +1,4 @@
+#include "PCH.h"
 #include "AppDelegate.h"
 #include "TitleScene.h"
 
@@ -16,7 +17,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview = GLView::create("My Game");
+        glview = GLView::create("Gravity Board Game");
 		glview->setFrameSize(1280.f, 720.f);
         director->setOpenGLView(glview);
     }

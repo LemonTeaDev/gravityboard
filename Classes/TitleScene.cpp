@@ -1,4 +1,6 @@
+#include "PCH.h"
 #include "TitleScene.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 
@@ -71,10 +73,11 @@ bool TitleScene::init()
 
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
+
+	RegisterTouchHandler();
     
     return true;
 }
-
 
 void TitleScene::menuCloseCallback(Ref* pSender)
 {
@@ -88,4 +91,22 @@ void TitleScene::menuCloseCallback(Ref* pSender)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
+}
+
+void TitleScene::RegisterTouchHandler()
+{
+	auto touchListener = EventListenerTouchOneByOne::create();
+	touchListener->onTouchBegan = [=](Touch* touch, Event* event)
+	{
+		return true;
+	};
+	
+	touchListener->onTouchEnded = [=](Touch* touch, Event* event)
+	{
+		auto gameScene = GameScene::createScene();
+		auto transition = TransitionFade::create(1.0f, gameScene);
+		Director::getInstance()->replaceScene(transition);
+	};
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
