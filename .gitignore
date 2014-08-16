@@ -4,6 +4,8 @@
 *.o
 *.obj
 *.ipch
+*.pdb
+*.log
 
 # Executables
 *.exe
