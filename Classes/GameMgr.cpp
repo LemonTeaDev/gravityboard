@@ -310,3 +310,23 @@ bool GameMgr::CanMakeMove(int playerIdx)
 	
 	return false;
 }
+
+void GameMgr::DrawSkip()
+{
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto skipItem = MenuItemImage::create(
+		"skip.png",
+		"skipPushed.png",
+		[&](Ref* sender) {
+		g_GameMgr.OnPlayerCast();
+	});
+
+	skipItem->setPosition(Vec2(origin.x + visibleSize.width - skipItem->getContentSize().width / 2,
+		origin.y + skipItem->getContentSize().height / 2));
+
+	auto menu = Menu::create(skipItem, NULL);
+	menu->setPosition(Vec2::ZERO);
+	gameScene->addChild(menu, 1);
+}

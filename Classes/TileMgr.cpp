@@ -77,6 +77,8 @@ bool TileMgr::CreateTiles()
 		createResult = CreateTilesOddRows(tileOrigin);
 	}
 
+	CheckSkip();
+
 	return createResult;
 }
 
@@ -193,22 +195,7 @@ void TileMgr::CheckSkip()
 		return;
 	}
 
-	Size visibleSize = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-	auto skipItem = MenuItemImage::create(
-		"skip.png",
-		"skipPushed.png",
-		[&](Ref* sender) {
-			g_GameMgr.OnPlayerCast();
-	});
-
-	skipItem->setPosition(Vec2(origin.x + visibleSize.width - skipItem->getContentSize().width / 2,
-		origin.y + skipItem->getContentSize().height / 2));
-
-	auto menu = Menu::create(skipItem, NULL);
-	menu->setPosition(Vec2::ZERO);
-//	TitleScene->addChild(menu, 1);
+	g_GameMgr.DrawSkip();
 }
 
 void TileMgr::PostTileCreate(
