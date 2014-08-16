@@ -47,7 +47,7 @@ void GameMgr::StartGame(GameScene* _gameScene)
 		break;
 	}
 
-	for (int_fast8_t i = 1; i <= numPlayers; ++i)
+	for (int i = 1; i <= numPlayers; ++i)
 	{
 		playerReverseUsedMap[i] = false;
 	}
@@ -112,7 +112,7 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 	boardLength = GetPrivateProfileInt(modeName, L"Length", 6, L"gravity.ini");;
 	turns = 0;
 
-	int_fast8_t buffer;
+	int buffer;
 	if (gameMode == ffa3s || gameMode == ffa4s) {
 		buffer = GetPrivateProfileInt(modeName, L"CardPoints", 123456, L"gravity.ini");
 	} else {
@@ -122,7 +122,7 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 		cardPoints[i] = buffer % 10;
 		buffer /= 10;
 	}
-	GetPrivateProfileInt(L"Custom", L"CardMap", buffer, L"gravity.ini");
+	buffer = GetPrivateProfileInt(L"Custom", L"CardMap", 111222, L"gravity.ini");
 	CardMap cardMap;
 	for (int i = boardLength; i >= 1; i--) {
 		cardMap[i] = buffer % 10;
@@ -131,7 +131,9 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 	}
 	
 	for (int i = 1; i <= numPlayers; i++) {
-		playerCardMap[i] = cardMap;
+		for (int j = 1; j <= boardLength; j++) {
+			playerCardMap[i][j] = cardMap[j];
+		}
 		playerScoreMap[i] = 0;
 	}
 
@@ -141,19 +143,43 @@ void GameMgr::LoadSettings(LPCWSTR modeName) {
 	currentCastPlayer = currentTurnStarter;
 }
 
-int_fast8_t GameMgr::GetCurrentCastPlayer()
+int GameMgr::GetCurrentCastPlayer()
 {
 	return currentCastPlayer;
 }
 
-int_fast8_t GameMgr::GetCurrentTurnStarter()
+int GameMgr::GetCurrentTurnStarter()
 {
 	return currentTurnStarter;
 }
 
 void GameMgr::OnTurnEnd()
 {
-	(gameScene->GetTileMgr()).GetTiles();
+	for (int i = 0; i < boardWidth; ++i) {
+		std::map<int, int> gravity; // magnitudes of gravity at each position
+		gravity[1] = 1; // gravity at first column is always 1
+		for (int j = 2; j <= boardLength; ++j) { // record gravity magnitudes
+			gravity[j] = gravity[j - 1] + (gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount() * (reverseClicked ? -1 : 1);
+		}
+
+		for (int j = 1; j <= boardLength; ++j) { // move pieces
+			if ((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount()) {
+				int destination = j - gravity[j];
+
+				
+
+				((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildren())[0]
+				(gameScene->GetTileMgr()).GetTiles()[i][destination]->addChild((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildByTag());
+				(gameScene->GetTileMgr()).GetTiles()[i][j]->removeAllChildren();
+			}
+		}
+
+		for (int j = 0; j <= boardLength; ++j) { // delete destroyed pieces and calculate points
+			if (j == 0) {
+
+			}
+		}
+	}
 
 	currentTurnStarter = (currentTurnStarter + 1) % numPlayers;
 	currentCastPlayer += currentTurnStarter;
