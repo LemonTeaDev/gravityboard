@@ -264,7 +264,7 @@ void GameMgr::OnTurnEnd()
 		std::map<int, int> gravity; // magnitudes of gravity at each position
 		gravity[1] = 1; // gravity at first column is always 1
 		for (int j = 2; j <= boardLength; ++j) { // record gravity magnitudes
-			gravity[j] = gravity[j - 1] + (gameScene->GetTileMgr()).GetTiles()[i][j-1]->getChildrenCount() 
+			gravity[j] = gravity[j - 1] + (gameScene->GetTileMgr()).GetTiles()[i][j - 1]->getChildrenCount() 
 				* (reverseClicked ? -1 : 1);
 		}
 
@@ -419,4 +419,23 @@ void GameMgr::UpdateScoreBoard()
 int GameMgr::GetCardScore(int cardIdx)
 {
 	return cardPoints[cardIdx];
+}
+
+bool GameMgr::CanMakeMove(int playerIdx)
+{
+	for (int i = 1; i <= boardLength; ++i)
+	{
+		if (playerCardMap[playerIdx][i])
+		{
+			for (int j = 0; j < boardWidth; j++)
+			{
+				if (!((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount()))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	
+	return false;
 }
