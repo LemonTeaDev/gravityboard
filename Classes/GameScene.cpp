@@ -54,7 +54,7 @@ bool GameScene::init()
 	this->addChild(ndmMouth, NDM_MOUTH_Z);
 
 	// start game
-	g_GameMgr.StartGame();
+	g_GameMgr.StartGame(this);
 
     return true;
 }

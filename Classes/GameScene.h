@@ -10,6 +10,24 @@ private:
 	static const int NDM_MOUTH_Z = 3;
 
 public:
+	static const int PLAYER_1_SCORE_ICON_TAG = 101;
+	static const int PLAYER_2_SCORE_ICON_TAG = 102;
+	static const int PLAYER_3_SCORE_ICON_TAG = 103;
+	static const int PLAYER_4_SCORE_ICON_TAG = 104;
+	static const int PLAYER_1_SCORE_LABEL_TAG = 151;
+	static const int PLAYER_2_SCORE_LABEL_TAG = 152;
+	static const int PLAYER_3_SCORE_LABEL_TAG = 153;
+	static const int PLAYER_4_SCORE_LABEL_TAG = 154;
+
+	static const int CURRENT_CAST_PLAYER_ICON_TAG = 201;
+	static const int CURRENT_CAST_PLAYER_C1_LEFT = 251;
+	static const int CURRENT_CAST_PLAYER_C2_LEFT = 252;
+	static const int CURRENT_CAST_PLAYER_C3_LEFT = 253;
+	static const int CURRENT_CAST_PLAYER_C4_LEFT = 254;
+	static const int CURRENT_CAST_PLAYER_C5_LEFT = 255;
+	static const int CURRENT_CAST_PLAYER_C6_LEFT = 266;
+
+public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cc::Scene* createScene();
 
