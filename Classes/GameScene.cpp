@@ -201,11 +201,13 @@ bool GameScene::init()
 		"reverseHairbandOff.png",
 		"reverseHairbandOn.png",
 		[&](Ref *sender) {
-			g_GameMgr.reverseClicked = true;
+			if (g_GameMgr.CanMakeMove(g_GameMgr.GetCurrentCastPlayer()))
+			{
+				g_GameMgr.reverseClicked = true;
+			}
 		});
 
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
-		origin.y + closeItem->getContentSize().height / 2));
+	closeItem->setPosition(Vec2(origin.x + 250, origin.y + visibleSize.height * 0.8));
 
 	// create menu, it's an autorelease object
 	auto menu = Menu::create(closeItem, NULL);
@@ -216,11 +218,44 @@ bool GameScene::init()
     return true;
 }
 
-void GameScene::menuCloseCallback(Ref* pSender)
+void GameScene::UpdateScoreBoard()
 {
-    Director::getInstance()->end();
+	auto score1 = dynamic_cast<LabelTTF*>(this->getChildByTag(PLAYER_1_SCORE_LABEL_TAG));
+	auto score2 = dynamic_cast<LabelTTF*>(this->getChildByTag(PLAYER_2_SCORE_LABEL_TAG));
+	auto score3 = dynamic_cast<LabelTTF*>(this->getChildByTag(PLAYER_3_SCORE_LABEL_TAG));
+	auto score4 = dynamic_cast<LabelTTF*>(this->getChildByTag(PLAYER_4_SCORE_LABEL_TAG));
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+	if (score1 != nullptr)
+	{
+		score1->setString(g_GameMgr.GetPlayerScoreString(1));
+	}
+
+	if (score2 != nullptr)
+	{
+		score2->setString(g_GameMgr.GetPlayerScoreString(2));
+	}
+
+	if (score3 != nullptr)
+	{
+		score3->setString(g_GameMgr.GetPlayerScoreString(3));
+	}
+
+	if (score4 != nullptr)
+	{
+		score4->setString(g_GameMgr.GetPlayerScoreString(4));
+	}
+}
+
+void GameScene::UpdateCardInfo()
+{
+	auto infoLabel = dynamic_cast<LabelTTF*>(this->getChildByTag(INFO_LABEL_TAG));
+	if (infoLabel != nullptr)
+	{
+		infoLabel->setString(g_GameMgr.GetCardInfoString());
+	}
+}
+
+void GameScene::UpdateReverseButton()
+{
+
 }
