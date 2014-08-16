@@ -50,6 +50,8 @@ public:
 	
 	int GetCardScore(int cardIdx);
 
+	bool CanMakeMove(int playerIdx);
+
 public:
 	bool reverseClicked;
 
