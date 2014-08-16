@@ -193,8 +193,11 @@ void GameMgr::OnTurnEnd()
 		Director::getInstance()->replaceScene(transition);
 	}
 
-	UpdateScoreBoard();
-	UpdateCardInfo();
+	if (gameScene != nullptr)
+	{
+		gameScene->UpdateScoreBoard();
+		gameScene->UpdateCardInfo();
+	}
 }
 
 void GameMgr::OnPlayerCast()
@@ -206,11 +209,16 @@ void GameMgr::OnPlayerCast()
 	}
 
 	// update card usage info
-	UpdateCardInfo();
+	if (gameScene != nullptr)
+	{
+		gameScene->UpdateCardInfo();
+	}
 
-	// update 
-
-
+	// update reverse btn
+	if (gameScene != nullptr)
+	{
+		
+	}
 
 
 	if (((currentCastPlayer + numPlayers) - currentTurnStarter) % numPlayers == 0)
@@ -254,44 +262,6 @@ std::string GameMgr::GetCardInfoString()
 	gameInfoStr += std::to_string(turnsLeft);
 
 	return gameInfoStr;
-}
-
-void GameMgr::UpdateCardInfo()
-{
-	auto infoLabel = dynamic_cast<LabelTTF*>(gameScene->getChildByTag(GameScene::INFO_LABEL_TAG));
-	if (infoLabel != nullptr)
-	{
-		infoLabel->setString(GetCardInfoString());
-	}
-}
-
-void GameMgr::UpdateScoreBoard()
-{
-	if (gameScene == nullptr) { return; }
-	auto score1 = dynamic_cast<LabelTTF*>(gameScene->getChildByTag(GameScene::PLAYER_1_SCORE_LABEL_TAG));
-	auto score2 = dynamic_cast<LabelTTF*>(gameScene->getChildByTag(GameScene::PLAYER_2_SCORE_LABEL_TAG));
-	auto score3 = dynamic_cast<LabelTTF*>(gameScene->getChildByTag(GameScene::PLAYER_3_SCORE_LABEL_TAG));
-	auto score4 = dynamic_cast<LabelTTF*>(gameScene->getChildByTag(GameScene::PLAYER_4_SCORE_LABEL_TAG));
-
-	if (score1 != nullptr)
-	{
-		score1->setString(GetPlayerScoreString(1));
-	}
-
-	if (score2 != nullptr)
-	{
-		score2->setString(GetPlayerScoreString(2));
-	}
-
-	if (score3 != nullptr)
-	{
-		score3->setString(GetPlayerScoreString(3));
-	}
-
-	if (score4 != nullptr)
-	{
-		score4->setString(GetPlayerScoreString(4));
-	}
 }
 
 int GameMgr::GetCardScore(int cardIdx)

@@ -41,8 +41,6 @@ public:
 	int GetPlayerScore(int playerIdx);
 	std::string GetPlayerScoreString(int playerIdx);
 	std::string GetCardInfoString();
-	void UpdateScoreBoard();
-	void UpdateCardInfo();
 
 	bool IsReverseUsed(int playerIdx);
 	
