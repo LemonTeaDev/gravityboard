@@ -197,7 +197,7 @@ bool GameScene::init()
 	this->addChild(board, BOARD_Z);
 
 	// add menu
-	auto closeItem = MenuItemImage::create(
+	auto reverseButton = MenuItemImage::create(
 		"reverseHairbandOff.png",
 		"reverseHairbandOn.png",
 		[&](Ref *sender) {
@@ -205,12 +205,17 @@ bool GameScene::init()
 			{
 				g_GameMgr.reverseClicked = true;
 			}
+			else
+			{
+				MessageBeep(MB_ICONINFORMATION);
+				MessageBox("You are stuck now. Please skip this turn.", "Skip");
+			}
 		});
 
-	closeItem->setPosition(Vec2(origin.x + 250, origin.y + visibleSize.height * 0.8));
+	reverseButton->setPosition(Vec2(origin.x + 250, origin.y + visibleSize.height * 0.8));
 
 	// create menu, it's an autorelease object
-	auto menu = Menu::create(closeItem, NULL);
+	auto menu = Menu::create(reverseButton, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, SKIP_MENU_Z);
 
@@ -257,5 +262,19 @@ void GameScene::UpdateCardInfo()
 
 void GameScene::UpdateReverseButton()
 {
+	auto reverseBtn = getChildByTag(REVERSE_BUTTON_TAG);
+	if (reverseBtn == nullptr)
+	{
+		return;
+	}
 
+	int currentCastPlayer = g_GameMgr.GetCurrentCastPlayer();
+	if (g_GameMgr.IsReverseUsed(currentCastPlayer))
+	{
+		reverseBtn->setVisible(false);
+	}
+	else
+	{
+		reverseBtn->setVisible(true);
+	}
 }
