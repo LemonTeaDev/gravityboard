@@ -66,3 +66,19 @@ bool PlayStone::Init(
 	this->addChild(sprite);
 	return true;
 }
+
+int PlayStone::GetScore() const
+{
+	CC_ASSERT(g_GameMgr.GetGameMode() != GameMgr::none);
+	if (g_GameMgr.GetGameMode() == GameMgr::none)
+	{
+		return -1;
+	}
+
+	return g_GameMgr.GetCardScore(colPos);
+}
+
+int PlayStone::GetOwnerPlayer() const
+{
+	return ownerPlayer;
+}
