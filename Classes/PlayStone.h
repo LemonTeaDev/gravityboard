@@ -3,7 +3,11 @@
 class PlayStone : public cc::Node
 {
 public:
-	PlayStone(
+	static PlayStone* create(
+		int_fast8_t _ownerPlayer,
+		int_fast8_t _col,
+		bool _reverse);
+	bool Init(
 		int_fast8_t _ownerPlayer, 
 		int_fast8_t _col, 
 		bool _reverse);

@@ -4,32 +4,65 @@
 
 USING_NS_CC;
 
-PlayStone::PlayStone(
+PlayStone* PlayStone::create(
 	int_fast8_t _ownerPlayer, 
+	int_fast8_t _col, 
+	bool _reverse)
+{
+	PlayStone* ret = new PlayStone();
+	if (ret && ret->Init(_ownerPlayer, _col, _reverse))
+	{
+		ret->autorelease();
+	}
+	else
+	{
+		CC_SAFE_DELETE(ret);
+	}
+	return ret;
+}
+
+bool PlayStone::Init(
+	int_fast8_t _ownerPlayer,
 	int_fast8_t _col,
 	bool _reverse)
-: ownerPlayer(_ownerPlayer)
-, isReverse(_reverse)
-, colPos(_col)
 {
+	if (!Node::init())
+	{
+		return false;
+	}
+
+	ownerPlayer = _ownerPlayer;
+	isReverse = _reverse;
+	colPos = _col;
+
 	CC_ASSERT(g_GameMgr.GetGameMode() != GameMgr::none);
+
+	std::string playerPrefix = "";
+	if (_reverse)
+	{
+		playerPrefix += "r";
+	}
 
 	if (ownerPlayer == 1)
 	{
-		sprite = Sprite::create("player1.png");
+		playerPrefix = "sun";
 	}
 	else if (ownerPlayer == 2)
 	{
-		sprite = Sprite::create("player2.png");
+		playerPrefix = "moon";
 	}
 	else if (ownerPlayer == 3)
 	{
-		sprite = Sprite::create("player3.png");
+		playerPrefix = "star";
 	}
 	else if (ownerPlayer == 4)
 	{
-		sprite = Sprite::create("player4.png");
+		playerPrefix = "planet";
 	}
-	
+
+	std::string spriteName = playerPrefix + std::to_string(colPos) + ".png";
+	sprite = Sprite::create(spriteName);
 	sprite->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
+	this->addChild(sprite);
+	return true;
 }

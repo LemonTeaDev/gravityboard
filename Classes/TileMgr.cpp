@@ -1,5 +1,7 @@
 #include "PCH.h"
 #include "TileMgr.h"
+#include "GameMgr.h"
+#include "PlayStone.h"
 
 USING_NS_CC;
 
@@ -90,9 +92,7 @@ bool TileMgr::CreateTilesEvenRows(const cc::Point& tileOrigin)
 			Size tileSize = tile->getContentSize();
 			float posX = tileOrigin.x + tileSize.width * colIdx;
 			float posY = tileOrigin.y + tileSize.height * (numHalfRows - rowIdx - 1);
-			tile->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
-			tile->setPosition(posX, posY);
-			bgLayer->addChild(tile, TILE_Z);
+			PostTileCreate(tile, posX, posY, colIdx);
 			spriteLine.push_back(tile);
 		}
 		tiles.push_back(spriteLine);
@@ -108,9 +108,7 @@ bool TileMgr::CreateTilesEvenRows(const cc::Point& tileOrigin)
 			Size tileSize = tile->getContentSize();
 			float posX = tileOrigin.x + tileSize.width * colIdx;
 			float posY = tileOrigin.y - tileSize.height * (numRows - rowIdx);
-			tile->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
-			tile->setPosition(posX, posY);
-			bgLayer->addChild(tile, TILE_Z);
+			PostTileCreate(tile, posX, posY, colIdx);
 			spriteLine.push_back(tile);
 		}
 		tiles.push_back(spriteLine);
@@ -132,9 +130,7 @@ bool TileMgr::CreateTilesOddRows(const Point& tileOrigin)
 			Size tileSize = tile->getContentSize();
 			float posX = tileOrigin.x + tileSize.width * colIdx;
 			float posY = tileOrigin.y + tileSize.height * (numHalfRows - rowIdx - 1) + tileSize.height / 2;
-			tile->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
-			tile->setPosition(posX, posY);
-			bgLayer->addChild(tile, TILE_Z);
+			PostTileCreate(tile, posX, posY, colIdx);
 			spriteLine.push_back(tile);
 		}
 		tiles.push_back(spriteLine);
@@ -149,9 +145,7 @@ bool TileMgr::CreateTilesOddRows(const Point& tileOrigin)
 			Size tileSize = tile->getContentSize();
 			float posX = tileOrigin.x + tileSize.width * colIdx;
 			float posY = tileOrigin.y - tileSize.height / 2;
-			tile->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
-			tile->setPosition(posX, posY);
-			bgLayer->addChild(tile, TILE_Z);
+			PostTileCreate(tile, posX, posY, colIdx);
 			spriteLine.push_back(tile);
 		}
 		tiles.push_back(spriteLine);
@@ -167,9 +161,7 @@ bool TileMgr::CreateTilesOddRows(const Point& tileOrigin)
 			Size tileSize = tile->getContentSize();
 			float posX = tileOrigin.x + tileSize.width * colIdx;
 			float posY = tileOrigin.y - tileSize.height * (numRows - rowIdx) - tileSize.height / 2;
-			tile->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
-			tile->setPosition(posX, posY);
-			bgLayer->addChild(tile, TILE_Z);
+			PostTileCreate(tile, posX, posY, colIdx);
 			spriteLine.push_back(tile);
 		}
 		tiles.push_back(spriteLine);
@@ -190,4 +182,59 @@ int_fast8_t TileMgr::GetNumRows() const
 int_fast8_t TileMgr::GetNumCols() const
 {
 	return numCols;
+}
+
+void TileMgr::PostTileCreate(
+	Sprite* tile, 
+	float posX, 
+	float posY, 
+	int_fast8_t colIdx)
+{
+	if (tile != nullptr)
+	{
+		tile->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
+		tile->setPosition(posX, posY);
+		bgLayer->addChild(tile, TILE_Z);
+		tile->setTag(colIdx);
+		if (colIdx < 1)
+		{
+			return;
+		}
+		
+		auto touchListener = EventListenerTouchOneByOne::create();
+		touchListener->onTouchBegan = [=](Touch* touch, Event* event)
+		{
+			if (tile->getChildrenCount() > 0)
+			{
+				return false;
+			}
+
+			auto touchLocation = touch->getLocation();
+			auto tilePos = tile->getPosition();
+			auto tileSize = tile->getContentSize();
+			if (!Rect(tilePos.x, tilePos.y, tileSize.width, tileSize.height).containsPoint(touchLocation))
+			{
+				return false;
+			}
+
+			return true;
+		};
+
+		touchListener->onTouchEnded = [=](Touch* touch, Event* event)
+		{
+			auto player = g_GameMgr.GetCurrentCastPlayer();
+			auto& reverseClicked = g_GameMgr.reverseClicked;
+			PlayStone* playStone = PlayStone::create(player, colIdx, reverseClicked);
+
+			auto tilePos = tile->getPosition();
+			if (reverseClicked)
+			{
+				reverseClicked = false;
+			}
+			playStone->setAnchorPoint(Point::ANCHOR_MIDDLE);
+			tile->addChild(playStone);
+		};
+
+		Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, tile);
+	}
 }
