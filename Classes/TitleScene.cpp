@@ -1,6 +1,7 @@
 #include "PCH.h"
 #include "TitleScene.h"
 #include "GameScene.h"
+#include "base\ccTypes.h"
 
 USING_NS_CC;
 
@@ -55,8 +56,8 @@ bool TitleScene::init()
 
     // add a label shows "Hello World"
     // create and initialize a label
-    
-    auto label = LabelTTF::create("Hello World", "Arial", 24);
+
+    LabelTTF* label = LabelTTF::create("Hello World", "Arial", 24);
     
     // position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width/2,
