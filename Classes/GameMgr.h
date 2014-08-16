@@ -5,7 +5,10 @@
 class GameMgr
 {
 private:
-	const int_fast8_t DEFAULT_NUM_PLAYERS = 2;
+	const int BOARD_Z = 2;
+	const int BOARD_CONTENT_Z = 3;
+
+	const int_fast8_t DEFAULT_NUM_PLAYERS = 4;
 	typedef std::map<int_fast8_t, int_fast8_t> CardMap;
 	typedef std::map<int_fast8_t, CardMap> PlayerCardMap;
 	typedef std::map<int_fast8_t, int_fast8_t> CardScoreMap;

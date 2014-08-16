@@ -8,7 +8,7 @@ USING_NS_CC;
 
 GameMgr::GameMgr()
 : gameMode(none)
-, reservedGameMode(ffa4)
+, reservedGameMode(ffa3)
 , numPlayers(4)
 , currentCastPlayer(1)
 , currentTurnStarter(1)
@@ -61,32 +61,128 @@ void GameMgr::StartGame(GameScene* _gameScene)
 
 	Sprite* p1Icon = Sprite::create("player1.png");
 	p1Icon->setTag(GameScene::PLAYER_1_SCORE_ICON_TAG);
+	p1Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
+	gameScene->addChild(p1Icon, BOARD_CONTENT_Z);
 
-	LabelTTF* p1Score = LabelTTF::create("00", "Arial", 12);
+	LabelTTF* p1Score = LabelTTF::create("00", "Arial", 32);
+	p1Score->setColor(Color3B(0, 0, 0));
 	p1Score->setTag(GameScene::PLAYER_1_SCORE_LABEL_TAG);
+	p1Score->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
+	gameScene->addChild(p1Score, BOARD_CONTENT_Z);
 
 	Sprite* p2Icon = Sprite::create("player2.png");
 	p2Icon->setTag(GameScene::PLAYER_2_SCORE_ICON_TAG);
+	p2Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
+	gameScene->addChild(p2Icon, BOARD_CONTENT_Z);
 
-	LabelTTF* p2Score = LabelTTF::create("00", "Arial", 12);
+	LabelTTF* p2Score = LabelTTF::create("00", "Arial", 32);
+	p2Score->setColor(Color3B(0, 0, 0));
 	p2Score->setTag(GameScene::PLAYER_2_SCORE_LABEL_TAG);
+	p2Score->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
+	gameScene->addChild(p2Score, BOARD_CONTENT_Z);
 
 	Sprite* p3Icon = Sprite::create("player3.png");
 	p3Icon->setTag(GameScene::PLAYER_3_SCORE_ICON_TAG);
+	p3Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
+	gameScene->addChild(p3Icon, BOARD_CONTENT_Z);
 
-	LabelTTF* p3Score = LabelTTF::create("00", "Arial", 12);
+	LabelTTF* p3Score = LabelTTF::create("00", "Arial", 32);
+	p3Score->setColor(Color3B(0, 0, 0));
 	p3Score->setTag(GameScene::PLAYER_3_SCORE_LABEL_TAG);
+	p3Score->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
+	gameScene->addChild(p3Score, BOARD_CONTENT_Z);
 
+	Sprite* p4Icon = nullptr;
+	LabelTTF* p4Score = nullptr;
 	if (numPlayers > 3)
 	{
-		Sprite* p4Icon = Sprite::create("player4.png");
+		p4Icon = Sprite::create("player4.png");
 		p4Icon->setTag(GameScene::PLAYER_4_SCORE_ICON_TAG);
+		p4Icon->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
+		gameScene->addChild(p4Icon, BOARD_CONTENT_Z);
 
-		LabelTTF* p4Score = LabelTTF::create("00", "Arial", 12);
+		p4Score = LabelTTF::create("00", "Arial", 32);
+		p4Score->setColor(Color3B(0, 0, 0));
 		p4Score->setTag(GameScene::PLAYER_4_SCORE_LABEL_TAG);
+		p4Score->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
+		gameScene->addChild(p4Score, BOARD_CONTENT_Z);
 	}
 
-	gameScene->addChild(board);
+	{	// score line setting
+		float endX = origin.x + visibleSize.width;
+		float scoreY = origin.y + visibleSize.height - p3Score->getContentSize().height - 35;
+
+		const int PADDING1 = 20;
+		const int PADDING2 = 34;
+
+		if (numPlayers == 3)
+		{
+			p3Score->setPosition(
+				endX - p3Score->getContentSize().width - 30,
+				scoreY);
+
+			p3Icon->setPosition(
+				p3Score->getPositionX() - p3Icon->getContentSize().width - PADDING1,
+				scoreY);
+
+			p2Score->setPosition(
+				p3Icon->getPositionX() - p2Score->getContentSize().width - PADDING2,
+				scoreY);
+
+			p2Icon->setPosition(
+				p2Score->getPositionX() - p2Icon->getContentSize().width - PADDING1,
+				scoreY);
+
+			p1Score->setPosition(
+				p2Icon->getPositionX() - p1Score->getContentSize().width - PADDING2,
+				scoreY);
+
+			p1Icon->setPosition(
+				p1Score->getPositionX() - p1Icon->getContentSize().width - PADDING1,
+				scoreY);
+		}
+		else
+		{
+			p4Score->setPosition(
+				endX - p4Score->getContentSize().width - 30,
+				scoreY);
+			p4Icon->setPosition(
+				p4Score->getPositionX() - p4Icon->getContentSize().width - PADDING1,
+				scoreY);
+
+			p3Score->setPosition(
+				p4Icon->getPositionX() - p3Score->getContentSize().width - PADDING2,
+				scoreY);
+
+			p3Icon->setPosition(
+				p3Score->getPositionX() - p3Icon->getContentSize().width - PADDING1,
+				scoreY);
+
+			p2Score->setPosition(
+				p3Icon->getPositionX() - p2Score->getContentSize().width - PADDING2,
+				scoreY);
+
+			p2Icon->setPosition(
+				p2Score->getPositionX() - p2Icon->getContentSize().width - PADDING1,
+				scoreY);
+
+			p1Score->setPosition(
+				p2Icon->getPositionX() - p1Score->getContentSize().width - PADDING2,
+				scoreY);
+
+			p1Icon->setPosition(
+				p1Score->getPositionX() - p1Icon->getContentSize().width - PADDING1,
+				scoreY);
+		}
+	}
+
+	{
+
+	}
+
+
+	gameScene->addChild(board, BOARD_Z);
+	
 }
 
 void GameMgr::EndGame()
@@ -98,19 +194,19 @@ void GameMgr::EndGame()
 }
 
 void GameMgr::LoadSettings(LPCWSTR modeName) {
-	numPlayers = GetPrivateProfileInt(modeName, L"Players", 4, L"settings.ini");
+	numPlayers = GetPrivateProfileInt(modeName, L"Players", 4, L"Gravity.ini");
 
-	boardLength = GetPrivateProfileInt(modeName, L"Length", 6, L"settings.ini");;
-	boardWidth = GetPrivateProfileInt(modeName, L"Width", 3, L"settings.ini");
+	boardLength = GetPrivateProfileInt(modeName, L"Length", 6, L"Gravity.ini");;
+	boardWidth = GetPrivateProfileInt(modeName, L"Width", 3, L"Gravity.ini");
 	turns = 0;
 
 	int_fast8_t buffer;
-	buffer = GetPrivateProfileInt(modeName, L"CardPoints", 111111, L"settings.ini");
+	buffer = GetPrivateProfileInt(modeName, L"CardPoints", 111111, L"Gravity.ini");
 	for (int i = boardLength; i >= 1; i--) {
 		cardPoints[i] = buffer % 10;
 		buffer /= 10;
 	}
-	GetPrivateProfileInt(L"Custom", L"CardMap", buffer, L"settings.ini");
+	GetPrivateProfileInt(L"Custom", L"CardMap", buffer, L"Gravity.ini");
 	CardMap cardMap;
 	for (int i = boardLength; i >= 1; i--) {
 		cardMap[i] = buffer % 10;

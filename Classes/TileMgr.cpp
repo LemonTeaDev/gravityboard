@@ -147,7 +147,7 @@ bool TileMgr::CreateTilesOddRows(const Point& tileOrigin)
 			Size tileSize = tile->getContentSize();
 			float posX = tileOrigin.x + tileSize.width * colIdx;
 			float posY = tileOrigin.y - tileSize.height / 2;
-			PostTileCreate(tile, posX, posY, colIdx, rowIdx);
+			PostTileCreate(tile, posX, posY, colIdx, numHalfRows+1);
 			spriteLine.push_back(tile);
 		}
 		tiles.push_back(spriteLine);
