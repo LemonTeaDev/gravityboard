@@ -4,6 +4,8 @@
 
 Singleton<GameMgr> _g_GameMgr;
 
+USING_NS_CC;
+
 GameMgr::GameMgr()
 : gameMode(none)
 , reservedGameMode(ffa4)
@@ -43,12 +45,6 @@ void GameMgr::StartGame(GameScene* _gameScene)
 			LoadSettings(L"ffa4");
 		}
 		break;
-
-		case custom:
-		{
-			LoadSettings(L"custom");
-		}
-		break;
 	}
 
 	for (int_fast8_t i = 1; i <= numPlayers; ++i)
@@ -56,8 +52,41 @@ void GameMgr::StartGame(GameScene* _gameScene)
 		playerReverseUsedMap[i] = false;
 	}
 
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	Sprite* board = Sprite::create("board.png");
+	Size boardSize = board->getContentSize();
+	board->setAnchorPoint(Vec2(0.f, 0.f));
+	board->setPosition(origin.x + visibleSize.width - boardSize.width, origin.y + visibleSize.height - boardSize.height);
 
+	Sprite* p1Icon = Sprite::create("player1.png");
+	p1Icon->setTag(GameScene::PLAYER_1_SCORE_ICON_TAG);
 
+	LabelTTF* p1Score = LabelTTF::create("00", "Arial", 12);
+	p1Score->setTag(GameScene::PLAYER_1_SCORE_LABEL_TAG);
+
+	Sprite* p2Icon = Sprite::create("player2.png");
+	p2Icon->setTag(GameScene::PLAYER_2_SCORE_ICON_TAG);
+
+	LabelTTF* p2Score = LabelTTF::create("00", "Arial", 12);
+	p2Score->setTag(GameScene::PLAYER_2_SCORE_LABEL_TAG);
+
+	Sprite* p3Icon = Sprite::create("player3.png");
+	p3Icon->setTag(GameScene::PLAYER_3_SCORE_ICON_TAG);
+
+	LabelTTF* p3Score = LabelTTF::create("00", "Arial", 12);
+	p3Score->setTag(GameScene::PLAYER_3_SCORE_LABEL_TAG);
+
+	if (numPlayers > 3)
+	{
+		Sprite* p4Icon = Sprite::create("player4.png");
+		p4Icon->setTag(GameScene::PLAYER_4_SCORE_ICON_TAG);
+
+		LabelTTF* p4Score = LabelTTF::create("00", "Arial", 12);
+		p4Score->setTag(GameScene::PLAYER_4_SCORE_LABEL_TAG);
+	}
+
+	gameScene->addChild(board);
 }
 
 void GameMgr::EndGame()

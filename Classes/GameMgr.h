@@ -20,7 +20,6 @@ public:
 		ffa4,
 		ffa3s,
 		ffa4s,
-		custom
 	};
 
 public:
