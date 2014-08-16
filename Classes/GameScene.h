@@ -19,13 +19,7 @@ public:
 	static const int PLAYER_3_SCORE_LABEL_TAG = 153;
 	static const int PLAYER_4_SCORE_LABEL_TAG = 154;
 
-	static const int CURRENT_CAST_PLAYER_ICON_TAG = 201;
-	static const int CURRENT_CAST_PLAYER_C1_LEFT_TAG = 251;
-	static const int CURRENT_CAST_PLAYER_C2_LEFT_TAG = 252;
-	static const int CURRENT_CAST_PLAYER_C3_LEFT_TAG = 253;
-	static const int CURRENT_CAST_PLAYER_C4_LEFT_TAG = 254;
-	static const int CURRENT_CAST_PLAYER_C5_LEFT_TAG = 255;
-	static const int CURRENT_CAST_PLAYER_C6_LEFT_TAG = 266;
+	static const int INFO_LABEL_TAG = 201;
 
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer

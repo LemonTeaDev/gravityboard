@@ -5,7 +5,10 @@
 class GameMgr
 {
 private:
-	const int DEFAULT_NUM_PLAYERS = 2;
+	const int BOARD_Z = 2;
+	const int BOARD_CONTENT_Z = 3;
+
+	const int DEFAULT_NUM_PLAYERS = 4;
 	typedef std::map<int, int> CardMap;
 	typedef std::map<int, CardMap> PlayerCardMap;
 	typedef std::map<int, int> CardScoreMap;
@@ -39,6 +42,10 @@ public:
 	bool IsTeamMember(int playerIdx1, int playerIdx2);
 
 	GameMode reservedGameMode;	// can change in title screen
+
+	std::string GetPlayerScoreString(int playerIdx);
+	std::string GetGameInfoString();
+	void UpdateScoreBoard();
 
 public:
 	bool reverseClicked;
