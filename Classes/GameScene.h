@@ -1,9 +1,9 @@
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#pragma once
 
 #include "cocos2d.h"
+#include "TileMgr.h"
 
-class TitleScene : public cocos2d::Layer
+class GameScene : public cocos2d::Layer
 {
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
@@ -16,10 +16,9 @@ public:
     void menuCloseCallback(cc::Ref* pSender);
     
     // implement the "static create()" method manually
-    CREATE_FUNC(TitleScene);
+    CREATE_FUNC(GameScene);
 
 private:
-	void RegisterTouchHandler();
+	TileMgr tileMgr;
 };
 
-#endif // __HELLOWORLD_SCENE_H__
