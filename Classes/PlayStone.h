@@ -7,11 +7,17 @@ public:
 		int _ownerPlayer,
 		int _col,
 		bool _reverse);
+
 	bool Init(
 		int _ownerPlayer, 
 		int _col, 
 		bool _reverse);
-	bool IsReverse() const;
+
+	bool IsReverse() const
+	{
+		return isReverse;
+	}
+
 	int GetScore() const;
 	int GetOwnerPlayer() const;
 
