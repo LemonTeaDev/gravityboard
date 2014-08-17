@@ -186,31 +186,6 @@ int TileMgr::GetNumCols() const
 	return numCols;
 }
 
-void TileMgr::CheckSkip()
-{
-	if (_g_GameMgr.Instance().CanMakeMove(_g_GameMgr.Instance().GetCurrentCastPlayer()))
-	{
-		return;
-	}
-
-	Size visibleSize = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-	auto skipItem = MenuItemImage::create(
-		"skip.png",
-		"skipPushed.png",
-		[&](Ref* sender) {
-			g_GameMgr.OnPlayerCast();
-	});
-
-	skipItem->setPosition(Vec2(origin.x + visibleSize.width - skipItem->getContentSize().width / 2,
-		origin.y + skipItem->getContentSize().height / 2));
-
-	auto menu = Menu::create(skipItem, NULL);
-	menu->setPosition(Vec2::ZERO);
-//	TitleScene->addChild(menu, 1);
-}
-
 void TileMgr::PostTileCreate(
 	Sprite* tile, 
 	float posX, 
@@ -256,8 +231,9 @@ void TileMgr::PostTileCreate(
 			auto tilePos = tile->getPosition();
 			if (!g_GameMgr.CanPlaceInColumn(playStone->GetOwnerPlayer(), colIdx))
 			{
-				MessageBeep(MB_ICONINFORMATION);
-				cocos2d::MessageBox("You can't place any pieces there anymore.", "No more cards");
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+					"error.wav");
+				MessageBoxA(GetActiveWindow(), "You can't place any pieces there anymore.", "No more cards", MB_ICONINFORMATION);
 				return;
 			}
 
@@ -270,6 +246,9 @@ void TileMgr::PostTileCreate(
 			
 			g_GameMgr.UpdatePlayerCard(playStone->GetOwnerPlayer(), colIdx);
 			g_GameMgr.OnPlayerCast();
+
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+				"LocateCookie.wav");
 		};
 
 		Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, tile);

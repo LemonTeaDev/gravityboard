@@ -43,6 +43,7 @@ public:
 	std::string GetCardInfoString();
 	void UpdatePlayerCard(int playerIdx, int colIdx);
 
+	void UseReverse(int playerIdx);
 	bool IsReverseUsed(int playerIdx);
 	
 	int GetCardScore(int cardIdx);
@@ -50,6 +51,18 @@ public:
 	bool CanPlaceInColumn(int playerIdx, int colIdx);
 	bool CanMakeMove(int playerIdx);
 
+	int GetBoardWidth()
+	{
+		return boardWidth;
+	}
+
+	int GetBoardLength()
+	{
+		return boardLength;
+	}
+
+	void DrawNext();
+	void DrawSkip();
 public:
 	bool reverseClicked;
 

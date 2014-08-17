@@ -11,7 +11,7 @@ USING_NS_CC;
 
 GameMgr::GameMgr()
 : gameMode(none)
-, reservedGameMode(ffa4)
+// , reservedGameMode(ffa4)
 , numPlayers(4)
 , currentCastPlayer(1)
 , currentTurnStarter(1)
@@ -22,7 +22,7 @@ GameMgr::GameMgr()
 void GameMgr::StartGame(GameScene* _gameScene)
 {
 	gameScene = _gameScene;
-	gameMode = reservedGameMode;	
+	gameMode = reservedGameMode;
 	switch (gameMode)
 	{
 		case ffa3:
@@ -127,23 +127,50 @@ void GameMgr::OnTurnEnd()
 		std::map<int, int> gravity; // magnitudes of gravity at each position
 		gravity[1] = 1; // gravity at first column is always 1
 		for (int j = 2; j <= boardLength; ++j) { // record gravity magnitudes
-			gravity[j] = gravity[j - 1] + (gameScene->GetTileMgr()).GetTiles()[i][j - 1]->getChildrenCount() 
-				* (reverseClicked ? -1 : 1);
+
+			auto tile = gameScene->GetTileMgr().GetTiles()[i][j - 1];
+
+			auto children = tile->getChildren();
+			gravity[j] = gravity[j - 1];
+			for (auto child : children)
+			{
+				bool isReverseStone = false;
+				PlayStone* playStone = dynamic_cast<PlayStone*>(child);
+				if (playStone != nullptr && playStone->IsReverse())
+				{
+					isReverseStone = true;
+				}
+				gravity[j] += (isReverseStone ? -1 : 1);
+			}
 		}
 
-		for (int j = 1; j <= boardLength; ++j) { // move pieces
+		for (int j = 1; j <= boardLength; ++j) { // move pieces while marking moved pieces
 			if ((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount()) {
 				int destination = std::max(j - gravity[j], 0);
 
 				auto childrenVec = gameScene->GetTileMgr().GetTiles()[i][j]->getChildren();
 				Node* spriteToMove = childrenVec.at(0);
-				spriteToMove->removeFromParentAndCleanup(false);
-
-				(gameScene->GetTileMgr()).GetTiles()[i][destination]->addChild(spriteToMove);
+				if (spriteToMove->getTag() != -10)
+				{
+					if (destination > boardLength)
+					{
+						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+							"blowaway.wav");
+						auto jumpAction = JumpBy::create(1.0f, Vec2(1500, 500), 20.f, 2);
+						spriteToMove->runAction(jumpAction);
+						spriteToMove->removeFromParent();
+					}
+					else
+					{
+						spriteToMove->removeFromParentAndCleanup(false);
+						(gameScene->GetTileMgr()).GetTiles()[i][destination]->addChild(spriteToMove);
+						spriteToMove->setTag(-10); // marks as already moved
+					}
+				}
 			}
 		}
 
-		for (int j = 0; j <= boardLength; ++j) { // delete destroyed pieces and calculate points
+		for (int j = 0; j <= boardLength; ++j) { // delete destroyed pieces, unmark marked pieces, and calculate points
 			if (j == 0)
 			{
 				auto children = (gameScene->GetTileMgr()).GetTiles()[i][j]->getChildren();
@@ -157,6 +184,8 @@ void GameMgr::OnTurnEnd()
 						auto stoneOwner = playStone->GetOwnerPlayer();
 						auto stoneScore = playStone->GetScore();
 						playerScoreMap[stoneOwner] += stoneScore;
+						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+							"eat.wav");
 					}
 
 					if (child != nullptr)
@@ -172,6 +201,12 @@ void GameMgr::OnTurnEnd()
 				if ((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount() >= 2)
 				{
 					(gameScene->GetTileMgr()).GetTiles()[i][j]->removeAllChildren();
+					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+						"boom.wav");
+				}
+				else if ((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount() == 1)
+				{
+					((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildren()).at(0)->setTag(0);
 				}
 			}
 		}
@@ -191,12 +226,22 @@ void GameMgr::OnTurnEnd()
 		auto resultScene = ResultScene::createScene();
 		auto transition = TransitionFade::create(1.0f, resultScene);
 		Director::getInstance()->replaceScene(transition);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"FlipPage.wav");
+	}
+	else
+	{
+		if (!CanMakeMove(GetCurrentCastPlayer()))
+		{
+			g_GameMgr.DrawSkip();
+		}
 	}
 
 	if (gameScene != nullptr)
 	{
 		gameScene->UpdateScoreBoard();
 		gameScene->UpdateCardInfo();
+		gameScene->UpdateReverseButton();
 	}
 }
 
@@ -208,6 +253,8 @@ void GameMgr::OnPlayerCast()
 		currentCastPlayer += numPlayers;
 	}
 
+
+
 	// update card usage info
 	// update reverse btn
 	if (gameScene != nullptr)
@@ -218,13 +265,25 @@ void GameMgr::OnPlayerCast()
 
 	if (((currentCastPlayer + numPlayers) - currentTurnStarter) % numPlayers == 0)
 	{
-		OnTurnEnd();
+		g_GameMgr.DrawNext();
+	}
+	else
+	{
+		if (!CanMakeMove(GetCurrentCastPlayer()))
+		{
+			g_GameMgr.DrawSkip();
+		}
 	}
 }
 
 GameMgr::GameMode GameMgr::GetGameMode() const
 {
 	return gameMode;
+}
+
+void GameMgr::UseReverse(int playerIdx)
+{
+	playerReverseUsedMap[playerIdx] = true;
 }
 
 bool GameMgr::IsReverseUsed(int playerIdx)
@@ -295,7 +354,8 @@ bool GameMgr::CanMakeMove(int playerIdx)
 		{
 			for (int j = 0; j < boardWidth; j++)
 			{
-				if (!((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount()))
+				const TileMgr::SpriteVec2D& tiles = gameScene->GetTileMgr().GetTiles();
+				if (!((tiles[j][i]->getChildrenCount())))
 				{
 					return true;
 				}
@@ -304,4 +364,50 @@ bool GameMgr::CanMakeMove(int playerIdx)
 	}
 	
 	return false;
+}
+
+void GameMgr::DrawNext()
+{
+	if (g_GameMgr.GetGameMode() == GameMgr::none) { return; }
+
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto nextItem = MenuItemImage::create(
+		"skip.png", // TODO: change to next.png
+		"skipPushed.png", // TODO: change to nextPushed.png
+		[&](Ref* sender) {
+		g_GameMgr.OnTurnEnd();
+	}
+	);
+
+	nextItem->setPosition(Vec2(origin.x - 290 + visibleSize.width - nextItem->getContentSize().width / 2,
+		origin.y + nextItem->getContentSize().height / 2));
+
+	auto menu = Menu::create(nextItem, NULL);
+	menu->setPosition(Vec2::ZERO);
+	gameScene->addChild(menu, 1);
+}
+
+void GameMgr::DrawSkip()
+{
+	if (g_GameMgr.GetGameMode() == GameMgr::none) { return; }
+
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto skipItem = MenuItemImage::create(
+		"skip.png",
+		"skipPushed.png",
+		[&](Ref* sender) {
+		g_GameMgr.OnPlayerCast();
+	}
+	);
+
+	skipItem->setPosition(Vec2(origin.x + visibleSize.width - skipItem->getContentSize().width / 2,
+		origin.y + skipItem->getContentSize().height / 2));
+
+	auto menu = Menu::create(skipItem, NULL);
+	menu->setPosition(Vec2::ZERO);
+	gameScene->addChild(menu, 1);
 }

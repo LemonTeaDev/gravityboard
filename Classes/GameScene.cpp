@@ -46,13 +46,6 @@ bool GameScene::init()
 	ndmMouth->setAnchorPoint(Vec2(0.f, 0.5f));
 	ndmMouth->setPosition(Vec2(origin.x + 195, origin.y + visibleSize.height * 0.43));
 
-	// place tiles
-	tileMgr.Init(
-		this,
-		ndmMouth->getPosition(),
-		ndmMouth->getContentSize());
-	tileMgr.CreateTiles();
-
 	// add sprites to the scene
 	this->addChild(bgImage, 0);
 	this->addChild(ndmTan, NDM_Z);
@@ -60,6 +53,15 @@ bool GameScene::init()
 
 	// start game
 	g_GameMgr.StartGame(this);
+
+	// place tiles
+	tileMgr.Init(
+		this,
+		ndmMouth->getPosition(),
+		ndmMouth->getContentSize(),
+		g_GameMgr.GetBoardWidth(),
+		g_GameMgr.GetBoardLength() + 1);
+	tileMgr.CreateTiles();
 
 	// post start add sprites
 	Sprite* board = Sprite::create("board.png");
@@ -197,28 +199,40 @@ bool GameScene::init()
 	this->addChild(board, BOARD_Z);
 
 	// add menu
-	auto reverseButton = MenuItemImage::create(
+	MenuItemImage* reverseButton = MenuItemImage::create(
 		"reverseHairbandOff.png",
 		"reverseHairbandOn.png",
 		[&](Ref *sender) {
-			if (g_GameMgr.CanMakeMove(g_GameMgr.GetCurrentCastPlayer()))
+			int currentCastPlayer = g_GameMgr.GetCurrentCastPlayer();
+
+			if (g_GameMgr.CanMakeMove(currentCastPlayer))
 			{
 				g_GameMgr.reverseClicked = true;
+				g_GameMgr.UseReverse(currentCastPlayer);
+				UpdateReverseButton();
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+					"ReverseButton.wav");
 			}
 			else
 			{
-				MessageBeep(MB_ICONINFORMATION);
-				MessageBox("You are stuck now. Please skip this turn.", "Skip");
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+					"error.wav");
+				MessageBoxA(GetActiveWindow(), "You are stuck now. Please skip this turn.", "Stuck", MB_ICONINFORMATION);
 			}
 		});
 
+	reverseButton->setTag(REVERSE_BUTTON_TAG);
 	reverseButton->setPosition(Vec2(origin.x + 250, origin.y + visibleSize.height * 0.8));
 
 	// create menu, it's an autorelease object
 	auto menu = Menu::create(reverseButton, NULL);
 	menu->setPosition(Vec2::ZERO);
+	menu->setTag(REVERSE_MENU_TAG);
 	this->addChild(menu, SKIP_MENU_Z);
 
+	// play bgm
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
+		"Pro1_W.wav", true);
 
     return true;
 }
@@ -262,7 +276,10 @@ void GameScene::UpdateCardInfo()
 
 void GameScene::UpdateReverseButton()
 {
-	auto reverseBtn = getChildByTag(REVERSE_BUTTON_TAG);
+	auto menu = getChildByTag(REVERSE_MENU_TAG);
+	if (menu == nullptr) { return; }
+
+	auto reverseBtn = menu->getChildByTag(REVERSE_BUTTON_TAG);
 	if (reverseBtn == nullptr)
 	{
 		return;

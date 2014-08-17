@@ -23,7 +23,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     }
 
     // turn on display FPS
-    director->setDisplayStats(true);
+	director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
@@ -31,7 +31,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // create a scene. it's an autorelease object
     auto scene = TitleScene::createScene();
 
-    // run
+	// preload bgms
+	CocosDenshion::SimpleAudioEngine* engine = CocosDenshion::SimpleAudioEngine::getInstance();
+	engine->preloadBackgroundMusic("Pro1_W.wav");
+	engine->preloadBackgroundMusic("Main_W.wav");
+
+	// run
     director->runWithScene(scene);
 
     return true;
@@ -40,15 +45,18 @@ bool AppDelegate::applicationDidFinishLaunching() {
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
 void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
+	Director::getInstance()->pause();
 
     // if you use SimpleAudioEngine, it must be pause
-    // SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+    CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 }
 
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground() {
+	Director::getInstance()->stopAnimation();
+	Director::getInstance()->resume();
     Director::getInstance()->startAnimation();
 
     // if you use SimpleAudioEngine, it must resume here
-    // SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+	CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 }

@@ -1,6 +1,7 @@
 #include "PCH.h"
 #include "TitleScene.h"
 #include "GameScene.h"
+#include "GameMgr.h"
 
 USING_NS_CC;
 
@@ -53,20 +54,8 @@ bool TitleScene::init()
     /////////////////////////////
     // 3. add your codes below...
 
-    // add a label shows "Hello World"
-    // create and initialize a label
-
-    LabelTTF* label = LabelTTF::create("Hello World", "Arial", 24);
-    
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
+    // add "titleBackground" splash screen"
+    auto sprite = Sprite::create("titleBackground.png");
 
     // position the sprite on the center of the screen
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
@@ -74,9 +63,128 @@ bool TitleScene::init()
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
 
-	RegisterTouchHandler();
-    
+	// play bgm
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
+		"Main_W.wav", true);
+	
+	
+	DrawButtonffa3();
+	DrawButtonffa4();
+	DrawButtonffa3s();
+	DrawButtonffa4s();
+
     return true;
+}
+
+void TitleScene::DrawButtonffa3()
+{
+	// ffa3
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto ffa3Item = MenuItemImage::create(
+		"titleArrowUL.png",
+		"titleArrowULPushed.png",
+		[&](Ref* sender) {
+		g_GameMgr.reservedGameMode = GameMgr::ffa3;
+
+		auto gameScene = GameScene::createScene();
+		auto transition = TransitionFade::create(1.0f, gameScene);
+		Director::getInstance()->replaceScene(transition);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"StartButton.wav");
+	}
+	);
+
+	ffa3Item->setPosition(Vec2(origin.x + 1028 - ffa3Item->getContentSize().width / 2,
+		origin.y + 382 + ffa3Item->getContentSize().height / 2));
+
+	auto menu = Menu::create(ffa3Item, NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, 1);
+}
+
+void TitleScene::DrawButtonffa4()
+{
+	// ffa4
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto ffa4Item = MenuItemImage::create(
+		"titleArrowUR.png",
+		"titleArrowURPushed.png",
+		[&](Ref* sender) {
+		g_GameMgr.reservedGameMode = GameMgr::ffa4;
+
+		auto gameScene = GameScene::createScene();
+		auto transition = TransitionFade::create(1.0f, gameScene);
+		Director::getInstance()->replaceScene(transition);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"StartButton.wav");
+	}
+	);
+
+	ffa4Item->setPosition(Vec2(origin.x + visibleSize.width - ffa4Item->getContentSize().width / 2,
+		origin.y + 418 + ffa4Item->getContentSize().height / 2));
+
+	auto menu = Menu::create(ffa4Item, NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, 1);
+}
+
+void TitleScene::DrawButtonffa3s()
+{
+	// ffa3s
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto ffa3sItem = MenuItemImage::create(
+		"titleArrowDL.png",
+		"titleArrowDLPushed.png",
+		[&](Ref* sender) {
+		g_GameMgr.reservedGameMode = GameMgr::ffa3s;
+
+		auto gameScene = GameScene::createScene();
+		auto transition = TransitionFade::create(1.0f, gameScene);
+		Director::getInstance()->replaceScene(transition);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"StartButton.wav");
+	}
+	);
+
+	ffa3sItem->setPosition(Vec2(origin.x + 882 - ffa3sItem->getContentSize().width / 2,
+		origin.y + 62 + ffa3sItem->getContentSize().height / 2));
+
+	auto menu = Menu::create(ffa3sItem, NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, 1);
+}
+
+void TitleScene::DrawButtonffa4s()
+{
+	// ffa4s
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto ffa4sItem = MenuItemImage::create(
+		"titleArrowDR.png",
+		"titleArrowDRPushed.png",
+		[&](Ref* sender) {
+		g_GameMgr.reservedGameMode = GameMgr::ffa4s;
+
+		auto gameScene = GameScene::createScene();
+		auto transition = TransitionFade::create(1.0f, gameScene);
+		Director::getInstance()->replaceScene(transition);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"StartButton.wav");
+	});
+
+	ffa4sItem->setPosition(Vec2(origin.x + visibleSize.width - 35 - ffa4sItem->getContentSize().width / 2,
+		origin.y - 10 + ffa4sItem->getContentSize().height / 2));
+
+	auto menu = Menu::create(ffa4sItem, NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, 1);
 }
 
 void TitleScene::menuCloseCallback(Ref* pSender)
@@ -91,22 +199,4 @@ void TitleScene::menuCloseCallback(Ref* pSender)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
-}
-
-void TitleScene::RegisterTouchHandler()
-{
-	auto touchListener = EventListenerTouchOneByOne::create();
-	touchListener->onTouchBegan = [=](Touch* touch, Event* event)
-	{
-		return true;
-	};
-	
-	touchListener->onTouchEnded = [=](Touch* touch, Event* event)
-	{
-		auto gameScene = GameScene::createScene();
-		auto transition = TransitionFade::create(1.0f, gameScene);
-		Director::getInstance()->replaceScene(transition);
-	};
-
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
