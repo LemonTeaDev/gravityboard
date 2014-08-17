@@ -210,7 +210,7 @@ bool GameScene::init()
 			else
 			{
 				MessageBeep(MB_ICONINFORMATION);
-				MessageBox("You are stuck now. Please skip this turn.", "Skip");
+				MessageBoxA(GetActiveWindow(), "You are stuck now. Please skip this turn.", "Skip", MB_ICONINFORMATION);
 			}
 		});
 

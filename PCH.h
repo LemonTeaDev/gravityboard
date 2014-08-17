@@ -4,5 +4,6 @@
 #include <functional>
 #include <random>
 #include <chrono>
+#include "SimpleAudioEngine.h"
 
 namespace cc = cocos2d;

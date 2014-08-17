@@ -257,7 +257,7 @@ void TileMgr::PostTileCreate(
 			if (!g_GameMgr.CanPlaceInColumn(playStone->GetOwnerPlayer(), colIdx))
 			{
 				MessageBeep(MB_ICONINFORMATION);
-				cocos2d::MessageBox("You can't place any pieces there anymore.", "No more cards");
+				MessageBoxA(GetActiveWindow(), "You can't place any pieces there anymore.", "No more cards", MB_ICONINFORMATION);
 				return;
 			}
 
