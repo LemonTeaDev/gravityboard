@@ -265,6 +265,7 @@ void GameMgr::OnPlayerCast()
 
 	if (((currentCastPlayer + numPlayers) - currentTurnStarter) % numPlayers == 0)
 	{
+		pressNext = 1;
 		g_GameMgr.DrawNext();
 	}
 	else
@@ -374,18 +375,21 @@ void GameMgr::DrawNext()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	auto nextItem = MenuItemImage::create(
-		"skip.png", // TODO: change to next.png
-		"skipPushed.png", // TODO: change to nextPushed.png
+		"next.png",
+		"nextPushed.png",
 		[&](Ref* sender) {
 		g_GameMgr.OnTurnEnd();
+		pressNext = 0;
+		gameScene->getChildByName("Next")->removeFromParent();
 	}
 	);
 
-	nextItem->setPosition(Vec2(origin.x - 290 + visibleSize.width - nextItem->getContentSize().width / 2,
+	nextItem->setPosition(Vec2(origin.x - 15 + visibleSize.width - nextItem->getContentSize().width * 3 / 2,
 		origin.y + nextItem->getContentSize().height / 2));
 
 	auto menu = Menu::create(nextItem, NULL);
 	menu->setPosition(Vec2::ZERO);
+	menu->setName("Next");
 	gameScene->addChild(menu, 1);
 }
 
@@ -401,6 +405,7 @@ void GameMgr::DrawSkip()
 		"skipPushed.png",
 		[&](Ref* sender) {
 		g_GameMgr.OnPlayerCast();
+		gameScene->getChildByName("Skip")->removeFromParent();
 	}
 	);
 
@@ -409,5 +414,11 @@ void GameMgr::DrawSkip()
 
 	auto menu = Menu::create(skipItem, NULL);
 	menu->setPosition(Vec2::ZERO);
+	menu->setName("Skip");
 	gameScene->addChild(menu, 1);
+}
+
+bool GameMgr::GetPressNext()
+{
+	return pressNext;
 }

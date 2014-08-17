@@ -63,6 +63,8 @@ public:
 
 	void DrawNext();
 	void DrawSkip();
+
+	bool GetPressNext();
 public:
 	bool reverseClicked;
 
@@ -80,6 +82,8 @@ private:
 	PlayerReverseUsedMap playerReverseUsedMap;
 	GameMode gameMode;
 	GameScene* gameScene;
+
+	bool pressNext;
 
 	void LoadSettings(LPCWSTR modeName);
 };
