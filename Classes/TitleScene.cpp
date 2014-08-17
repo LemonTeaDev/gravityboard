@@ -75,6 +75,10 @@ bool TitleScene::init()
     this->addChild(sprite, 0);
 
 	RegisterTouchHandler();
+
+	// play bgm
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
+		"Main_W.wav", true);
     
     return true;
 }
@@ -106,6 +110,8 @@ void TitleScene::RegisterTouchHandler()
 		auto gameScene = GameScene::createScene();
 		auto transition = TransitionFade::create(1.0f, gameScene);
 		Director::getInstance()->replaceScene(transition);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"FlipPage.wav");
 	};
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);

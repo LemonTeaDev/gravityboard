@@ -31,7 +31,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // create a scene. it's an autorelease object
     auto scene = TitleScene::createScene();
 
-    // run
+	// preload bgms
+	CocosDenshion::SimpleAudioEngine* engine = CocosDenshion::SimpleAudioEngine::getInstance();
+	engine->preloadBackgroundMusic("Pro1_W.wav");
+	engine->preloadBackgroundMusic("Main_W.wav");
+
+	// run
     director->runWithScene(scene);
 
     return true;
