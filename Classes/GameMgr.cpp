@@ -144,28 +144,31 @@ void GameMgr::OnTurnEnd()
 			}
 		}
 
-		for (int j = 1; j <= boardLength; ++j) { // move pieces
+		for (int j = 1; j <= boardLength; ++j) { // move pieces while marking moved pieces
 			if ((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount()) {
 				int destination = std::max(j - gravity[j], 0);
 
 				auto childrenVec = gameScene->GetTileMgr().GetTiles()[i][j]->getChildren();
 				Node* spriteToMove = childrenVec.at(0);
-
-				if (destination > boardLength)
+				if (spriteToMove->getTag() != -10)
 				{
-					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-						"blowaway.wav");
-					spriteToMove->removeFromParent();
-				}
-				else
-				{
-					spriteToMove->removeFromParentAndCleanup(false);
-					(gameScene->GetTileMgr()).GetTiles()[i][destination]->addChild(spriteToMove);
+					if (destination > boardLength)
+					{
+						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+							"blowaway.wav");
+						spriteToMove->removeFromParent();
+					}
+					else
+					{
+						spriteToMove->removeFromParentAndCleanup(false);
+						(gameScene->GetTileMgr()).GetTiles()[i][destination]->addChild(spriteToMove);
+						spriteToMove->setTag(-10); // marks as already moved
+					}
 				}
 			}
 		}
 
-		for (int j = 0; j <= boardLength; ++j) { // delete destroyed pieces and calculate points
+		for (int j = 0; j <= boardLength; ++j) { // delete destroyed pieces, unmark marked pieces, and calculate points
 			if (j == 0)
 			{
 				auto children = (gameScene->GetTileMgr()).GetTiles()[i][j]->getChildren();
@@ -198,6 +201,10 @@ void GameMgr::OnTurnEnd()
 					(gameScene->GetTileMgr()).GetTiles()[i][j]->removeAllChildren();
 					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
 						"boom.wav");
+				}
+				else if ((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount() == 1)
+				{
+					((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildren()).at(0)->setTag(0);
 				}
 			}
 		}
