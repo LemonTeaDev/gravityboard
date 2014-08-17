@@ -18,6 +18,12 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(TitleScene);
 
+	// Draw Buttons
+	void DrawButtonffa3();
+	void DrawButtonffa4();
+	void DrawButtonffa3s();
+	void DrawButtonffa4s();
+
 private:
 	void RegisterTouchHandler();
 };
