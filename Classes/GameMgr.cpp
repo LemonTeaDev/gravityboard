@@ -316,7 +316,7 @@ void GameMgr::OnPlayerCast()
 
 	if (((currentCastPlayer + numPlayers) - currentTurnStarter) % numPlayers == 0)
 	{
-		OnTurnEnd();
+		g_GameMgr.DrawNext();
 	}
 	else
 	{
@@ -428,7 +428,7 @@ void GameMgr::DrawNext()
 		"skip.png", // TODO: change to next.png
 		"skipPushed.png", // TODO: change to nextPushed.png
 		[&](Ref* sender) {
-		g_GameMgr.OnPlayerCast();
+		g_GameMgr.OnTurnEnd();
 	}
 	);
 
