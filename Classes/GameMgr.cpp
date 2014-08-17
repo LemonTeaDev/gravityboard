@@ -213,6 +213,13 @@ void GameMgr::OnTurnEnd()
 		auto transition = TransitionFade::create(1.0f, resultScene);
 		Director::getInstance()->replaceScene(transition);
 	}
+	else
+	{
+		if (!CanMakeMove(GetCurrentCastPlayer()))
+		{
+			g_GameMgr.DrawSkip();
+		}
+	}
 
 	if (gameScene != nullptr)
 	{
@@ -241,10 +248,12 @@ void GameMgr::OnPlayerCast()
 	{
 		OnTurnEnd();
 	}
-
-	if (!CanMakeMove(GetCurrentCastPlayer()))
+	else
 	{
-		g_GameMgr.DrawSkip();
+		if (!CanMakeMove(GetCurrentCastPlayer()))
+		{
+			g_GameMgr.DrawSkip();
+		}
 	}
 }
 
