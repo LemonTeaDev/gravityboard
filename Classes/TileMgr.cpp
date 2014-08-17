@@ -229,17 +229,19 @@ void TileMgr::PostTileCreate(
 			PlayStone* playStone = PlayStone::create(player, colIdx, reverseClicked);
 
 			auto tilePos = tile->getPosition();
+			
+			if (g_GameMgr.GetPressNext())
+			{
+				MessageBeep(MB_ICONINFORMATION);
+				MessageBoxA(GetActiveWindow(), "Press 'Next' to continue.", "Continue", MB_ICONINFORMATION);
+				return;
+			}
+
 			if (!g_GameMgr.CanPlaceInColumn(playStone->GetOwnerPlayer(), colIdx))
 			{
 				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
 					"error.wav");
 				MessageBoxA(GetActiveWindow(), "You can't place any pieces there anymore.", "No more cards", MB_ICONINFORMATION);
-				return;
-			}
-			if (g_GameMgr.GetPressNext())
-			{
-				MessageBeep(MB_ICONINFORMATION);
-				MessageBoxA(GetActiveWindow(), "Press 'Next' to continue.", "Continue", MB_ICONINFORMATION);
 				return;
 			}
 

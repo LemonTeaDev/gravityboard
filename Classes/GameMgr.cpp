@@ -335,6 +335,10 @@ GameMgr::GameMode GameMgr::GetGameMode() const
 
 void GameMgr::UseReverse(int playerIdx)
 {
+	if (pressNext)
+	{
+		return;
+	}
 	playerReverseUsedMap[playerIdx] = true;
 }
 
@@ -431,6 +435,7 @@ void GameMgr::DrawNext()
 		[&](Ref* sender) {
 		g_GameMgr.OnTurnEnd();
 		pressNext = 0;
+		reverseClicked = 0;
 		gameScene->getChildByName("Next")->removeFromParent();
 	}
 	);

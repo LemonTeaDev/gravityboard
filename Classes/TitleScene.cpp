@@ -67,7 +67,6 @@ bool TitleScene::init()
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
 		"Main_W.wav", true);
 	
-	
 	DrawButtonffa3();
 	DrawButtonffa4();
 	DrawButtonffa3s();
