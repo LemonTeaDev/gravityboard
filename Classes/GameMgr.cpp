@@ -361,6 +361,29 @@ bool GameMgr::CanMakeMove(int playerIdx)
 	return false;
 }
 
+void GameMgr::DrawNext()
+{
+	if (g_GameMgr.GetGameMode() == GameMgr::none) { return; }
+
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto nextItem = MenuItemImage::create(
+		"skip.png", // TODO: change to next.png
+		"skipPushed.png", // TODO: change to nextPushed.png
+		[&](Ref* sender) {
+		g_GameMgr.OnPlayerCast();
+	}
+	);
+
+	nextItem->setPosition(Vec2(origin.x - 290 + visibleSize.width - nextItem->getContentSize().width / 2,
+		origin.y + nextItem->getContentSize().height / 2));
+
+	auto menu = Menu::create(nextItem, NULL);
+	menu->setPosition(Vec2::ZERO);
+	gameScene->addChild(menu, 1);
+}
+
 void GameMgr::DrawSkip()
 {
 	if (g_GameMgr.GetGameMode() == GameMgr::none) { return; }
@@ -373,7 +396,8 @@ void GameMgr::DrawSkip()
 		"skipPushed.png",
 		[&](Ref* sender) {
 		g_GameMgr.OnPlayerCast();
-	});
+	}
+	);
 
 	skipItem->setPosition(Vec2(origin.x + visibleSize.width - skipItem->getContentSize().width / 2,
 		origin.y + skipItem->getContentSize().height / 2));

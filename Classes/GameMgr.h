@@ -61,6 +61,7 @@ public:
 		return boardLength;
 	}
 
+	void DrawNext();
 	void DrawSkip();
 public:
 	bool reverseClicked;
