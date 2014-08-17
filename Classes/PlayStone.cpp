@@ -63,7 +63,7 @@ bool PlayStone::Init(
 	std::string spriteName = playerPrefix + std::to_string(colPos) + ".png";
 	sprite = Sprite::create(spriteName);
 	sprite->setAnchorPoint(Point::ANCHOR_BOTTOM_LEFT);
-	this->addChild(sprite);
+	this->addChild(sprite, GameScene::PLAY_STONE_Z);
 	return true;
 }
 

@@ -134,6 +134,11 @@ void GameMgr::OnTurnEnd()
 			gravity[j] = gravity[j - 1];
 			for (auto child : children)
 			{
+				if (child->getActionManager()->getNumberOfRunningActionsInTarget(child) > 0)
+				{
+					continue;
+				}
+
 				bool isReverseStone = false;
 				PlayStone* playStone = dynamic_cast<PlayStone*>(child);
 				if (playStone != nullptr && playStone->IsReverse())
@@ -150,15 +155,24 @@ void GameMgr::OnTurnEnd()
 
 				auto childrenVec = gameScene->GetTileMgr().GetTiles()[i][j]->getChildren();
 				Node* spriteToMove = childrenVec.at(0);
-				if (spriteToMove->getTag() != -10)
+				if (spriteToMove->getTag() != -10
+					&& spriteToMove->getActionManager()->getNumberOfRunningActionsInTarget(spriteToMove) < 1)
 				{
 					if (destination > boardLength)
 					{
 						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
 							"blowaway.wav");
-						auto jumpAction = JumpBy::create(1.0f, Vec2(1500, 500), 20.f, 2);
-						spriteToMove->runAction(jumpAction);
-						spriteToMove->removeFromParent();
+						auto jumpAction = JumpBy::create(3.0f, Vec2(1500, 500), 20.f, 2);
+						auto callback = CallFuncN::create([](Node *pSender){
+							
+							Sprite *spr = (Sprite *)pSender;
+							if (spr != nullptr)
+							{
+								spr->removeFromParent();
+							}
+						});
+						auto seq = Sequence::create(jumpAction, callback, NULL);
+						spriteToMove->runAction(seq);
 					}
 					else
 					{
@@ -176,11 +190,14 @@ void GameMgr::OnTurnEnd()
 				auto children = (gameScene->GetTileMgr()).GetTiles()[i][j]->getChildren();
 				for (auto child : children)
 				{
+					if (child->getActionManager()->getNumberOfRunningActionsInTarget(child) > 0)
+					{
+						continue;
+					}
+
 					auto playStone = dynamic_cast<PlayStone*>(child);
 					if (playStone != nullptr)
 					{
-						// eat nom nom
-						// todo some fancy effects
 						auto stoneOwner = playStone->GetOwnerPlayer();
 						auto stoneScore = playStone->GetScore();
 						playerScoreMap[stoneOwner] += stoneScore;
@@ -190,7 +207,17 @@ void GameMgr::OnTurnEnd()
 
 					if (child != nullptr)
 					{
-						child->removeFromParent();
+						auto jumpAction = JumpBy::create(1.3f, Vec2(-200, -150), 30.f, 2);
+						auto callback = CallFuncN::create([](Node *pSender){
+
+							Sprite *spr = (Sprite *)pSender;
+							if (spr != nullptr)
+							{
+								spr->removeFromParent();
+							}
+						});
+						auto seq = Sequence::create(jumpAction, callback, NULL);
+						child->runAction(seq);
 					}
 				}
 			}
@@ -200,7 +227,31 @@ void GameMgr::OnTurnEnd()
 				// todo some fancy effects
 				if ((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount() >= 2)
 				{
-					(gameScene->GetTileMgr()).GetTiles()[i][j]->removeAllChildren();
+					auto children = (gameScene->GetTileMgr()).GetTiles()[i][j]->getChildren();
+					for (auto child : children)
+					{
+						if (child->getActionManager()->getNumberOfRunningActionsInTarget(child) > 0)
+						{
+							continue;
+						}
+
+						if (child != nullptr)
+						{
+							auto blinkAction = Blink::create(0.2f, 8);
+							auto callback = CallFuncN::create([](Node *pSender){
+
+								Sprite *spr = (Sprite *)pSender;
+								if (spr != nullptr)
+								{
+									spr->removeFromParent();
+								}
+							});
+							auto seq = Sequence::create(blinkAction, callback, NULL);
+							child->runAction(seq);
+						}
+
+					}
+					//(gameScene->GetTileMgr()).GetTiles()[i][j]->removeAllChildren();
 					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
 						"boom.wav");
 				}
