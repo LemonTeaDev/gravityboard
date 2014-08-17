@@ -11,7 +11,7 @@ USING_NS_CC;
 
 GameMgr::GameMgr()
 : gameMode(none)
-, reservedGameMode(ffa4)
+// , reservedGameMode(ffa4)
 , numPlayers(4)
 , currentCastPlayer(1)
 , currentTurnStarter(1)
@@ -22,7 +22,7 @@ GameMgr::GameMgr()
 void GameMgr::StartGame(GameScene* _gameScene)
 {
 	gameScene = _gameScene;
-	gameMode = reservedGameMode;	
+	gameMode = reservedGameMode;
 	switch (gameMode)
 	{
 		case ffa3:
