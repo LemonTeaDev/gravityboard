@@ -51,6 +51,7 @@ public:
 	bool CanPlaceInColumn(int playerIdx, int colIdx);
 	bool CanMakeMove(int playerIdx);
 
+	void DrawSkip();
 public:
 	bool reverseClicked;
 
