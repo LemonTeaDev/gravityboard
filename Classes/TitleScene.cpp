@@ -96,8 +96,8 @@ void TitleScene::DrawButtonffa3()
 	}
 	);
 
-	ffa3Item->setPosition(Vec2(origin.x + visibleSize.width - ffa3Item->getContentSize().width / 2,
-		origin.y + ffa3Item->getContentSize().height / 2));
+	ffa3Item->setPosition(Vec2(origin.x + 1028 - ffa3Item->getContentSize().width / 2,
+		origin.y + 382 + ffa3Item->getContentSize().height / 2));
 
 	auto menu = Menu::create(ffa3Item, NULL);
 	menu->setPosition(Vec2::ZERO);
@@ -123,7 +123,7 @@ void TitleScene::DrawButtonffa4()
 	);
 
 	ffa4Item->setPosition(Vec2(origin.x + visibleSize.width - ffa4Item->getContentSize().width / 2,
-		origin.y + ffa4Item->getContentSize().height / 2));
+		origin.y + 418 + ffa4Item->getContentSize().height / 2));
 
 	auto menu = Menu::create(ffa4Item, NULL);
 	menu->setPosition(Vec2::ZERO);
@@ -148,8 +148,8 @@ void TitleScene::DrawButtonffa3s()
 	}
 	);
 
-	ffa3sItem->setPosition(Vec2(origin.x + visibleSize.width - ffa3sItem->getContentSize().width / 2,
-		origin.y + ffa3sItem->getContentSize().height / 2));
+	ffa3sItem->setPosition(Vec2(origin.x + 882 - ffa3sItem->getContentSize().width / 2,
+		origin.y + 62 + ffa3sItem->getContentSize().height / 2));
 
 	auto menu = Menu::create(ffa3sItem, NULL);
 	menu->setPosition(Vec2::ZERO);
@@ -174,8 +174,8 @@ void TitleScene::DrawButtonffa4s()
 	}
 	);
 
-	ffa4sItem->setPosition(Vec2(origin.x + visibleSize.width - ffa4sItem->getContentSize().width / 2,
-		origin.y + ffa4sItem->getContentSize().height / 2));
+	ffa4sItem->setPosition(Vec2(origin.x + visibleSize.width - 35 - ffa4sItem->getContentSize().width / 2,
+		origin.y - 10 + ffa4sItem->getContentSize().height / 2));
 
 	auto menu = Menu::create(ffa4sItem, NULL);
 	menu->setPosition(Vec2::ZERO);
@@ -196,22 +196,4 @@ void TitleScene::menuCloseCallback(Ref* pSender)
 #endif
 }
 
-void TitleScene::RegisterTouchHandler()
-{
-	auto touchListener = EventListenerTouchOneByOne::create();
-	touchListener->onTouchBegan = [=](Touch* touch, Event* event)
-	{
-		return true;
-	};
-	
-	touchListener->onTouchEnded = [=](Touch* touch, Event* event)
-	{
-		auto gameScene = GameScene::createScene();
-		auto transition = TransitionFade::create(1.0f, gameScene);
-		Director::getInstance()->replaceScene(transition);
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-			"FlipPage.wav");
-	};
 
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
-}
