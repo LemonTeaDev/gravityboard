@@ -153,7 +153,8 @@ void GameMgr::OnTurnEnd()
 
 				if (destination > boardLength)
 				{
-					// todo some blowaway sound
+					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+						"blowaway.wav");
 					spriteToMove->removeFromParent();
 				}
 				else
@@ -178,6 +179,8 @@ void GameMgr::OnTurnEnd()
 						auto stoneOwner = playStone->GetOwnerPlayer();
 						auto stoneScore = playStone->GetScore();
 						playerScoreMap[stoneOwner] += stoneScore;
+						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+							"eat.wav");
 					}
 
 					if (child != nullptr)
@@ -193,6 +196,8 @@ void GameMgr::OnTurnEnd()
 				if ((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount() >= 2)
 				{
 					(gameScene->GetTileMgr()).GetTiles()[i][j]->removeAllChildren();
+					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+						"boom.wav");
 				}
 			}
 		}
@@ -212,6 +217,8 @@ void GameMgr::OnTurnEnd()
 		auto resultScene = ResultScene::createScene();
 		auto transition = TransitionFade::create(1.0f, resultScene);
 		Director::getInstance()->replaceScene(transition);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"FlipPage.wav");
 	}
 	else
 	{

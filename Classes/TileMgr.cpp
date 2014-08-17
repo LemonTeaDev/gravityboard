@@ -231,7 +231,8 @@ void TileMgr::PostTileCreate(
 			auto tilePos = tile->getPosition();
 			if (!g_GameMgr.CanPlaceInColumn(playStone->GetOwnerPlayer(), colIdx))
 			{
-				MessageBeep(MB_ICONINFORMATION);
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+					"error.wav");
 				MessageBoxA(GetActiveWindow(), "You can't place any pieces there anymore.", "No more cards", MB_ICONINFORMATION);
 				return;
 			}
@@ -245,6 +246,9 @@ void TileMgr::PostTileCreate(
 			
 			g_GameMgr.UpdatePlayerCard(playStone->GetOwnerPlayer(), colIdx);
 			g_GameMgr.OnPlayerCast();
+
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+				"LocateCookie.wav");
 		};
 
 		Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, tile);

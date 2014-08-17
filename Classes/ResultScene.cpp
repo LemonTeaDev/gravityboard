@@ -131,6 +131,8 @@ void ResultScene::RegisterTouchHandler()
 		auto titleScene = TitleScene::createScene();
 		auto transition = TransitionFade::create(1.0f, titleScene);
 		Director::getInstance()->replaceScene(transition);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"FlipPage.wav");
 	};
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);

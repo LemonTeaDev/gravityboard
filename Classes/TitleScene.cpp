@@ -63,6 +63,11 @@ bool TitleScene::init()
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
 
+	// play bgm
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
+		"Main_W.wav", true);
+	
+	
 	DrawButtonffa3();
 	DrawButtonffa4();
 	DrawButtonffa3s();

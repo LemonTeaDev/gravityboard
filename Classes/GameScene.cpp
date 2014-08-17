@@ -208,11 +208,14 @@ bool GameScene::init()
 				g_GameMgr.reverseClicked = true;
 				g_GameMgr.UseReverse(g_GameMgr.GetCurrentCastPlayer());
 				UpdateReverseButton();
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+					"ReverseButton.wav");
 			}
 			else
 			{
-				MessageBeep(MB_ICONINFORMATION);
-				MessageBoxA(GetActiveWindow(), "You are stuck now. Please skip this turn.", "Skip", MB_ICONINFORMATION);
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+					"error.wav");
+				MessageBoxA(GetActiveWindow(), "You are stuck now. Please skip this turn.", "Stuck", MB_ICONINFORMATION);
 			}
 		});
 
@@ -225,6 +228,9 @@ bool GameScene::init()
 	menu->setTag(REVERSE_MENU_TAG);
 	this->addChild(menu, SKIP_MENU_Z);
 
+	// play bgm
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
+		"Pro1_W.wav", true);
 
     return true;
 }
