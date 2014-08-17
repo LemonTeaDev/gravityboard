@@ -203,10 +203,12 @@ bool GameScene::init()
 		"reverseHairbandOff.png",
 		"reverseHairbandOn.png",
 		[&](Ref *sender) {
-			if (g_GameMgr.CanMakeMove(g_GameMgr.GetCurrentCastPlayer()))
+			int currentCastPlayer = g_GameMgr.GetCurrentCastPlayer();
+
+			if (g_GameMgr.CanMakeMove(currentCastPlayer))
 			{
 				g_GameMgr.reverseClicked = true;
-				g_GameMgr.UseReverse(g_GameMgr.GetCurrentCastPlayer());
+				g_GameMgr.UseReverse(currentCastPlayer);
 				UpdateReverseButton();
 				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
 					"ReverseButton.wav");

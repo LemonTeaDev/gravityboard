@@ -91,6 +91,8 @@ void TitleScene::DrawButtonffa3()
 		auto gameScene = GameScene::createScene();
 		auto transition = TransitionFade::create(1.0f, gameScene);
 		Director::getInstance()->replaceScene(transition);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"StartButton.wav");
 	}
 	);
 
@@ -117,6 +119,8 @@ void TitleScene::DrawButtonffa4()
 		auto gameScene = GameScene::createScene();
 		auto transition = TransitionFade::create(1.0f, gameScene);
 		Director::getInstance()->replaceScene(transition);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"StartButton.wav");
 	}
 	);
 
@@ -143,6 +147,8 @@ void TitleScene::DrawButtonffa3s()
 		auto gameScene = GameScene::createScene();
 		auto transition = TransitionFade::create(1.0f, gameScene);
 		Director::getInstance()->replaceScene(transition);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"StartButton.wav");
 	}
 	);
 
@@ -169,8 +175,9 @@ void TitleScene::DrawButtonffa4s()
 		auto gameScene = GameScene::createScene();
 		auto transition = TransitionFade::create(1.0f, gameScene);
 		Director::getInstance()->replaceScene(transition);
-	}
-	);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			"StartButton.wav");
+	});
 
 	ffa4sItem->setPosition(Vec2(origin.x + visibleSize.width - 35 - ffa4sItem->getContentSize().width / 2,
 		origin.y - 10 + ffa4sItem->getContentSize().height / 2));

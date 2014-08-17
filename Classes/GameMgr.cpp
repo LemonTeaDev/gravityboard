@@ -156,6 +156,8 @@ void GameMgr::OnTurnEnd()
 					{
 						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
 							"blowaway.wav");
+						auto jumpAction = JumpBy::create(1.0f, Vec2(1500, 500), 20.f, 2);
+						spriteToMove->runAction(jumpAction);
 						spriteToMove->removeFromParent();
 					}
 					else
@@ -239,6 +241,7 @@ void GameMgr::OnTurnEnd()
 	{
 		gameScene->UpdateScoreBoard();
 		gameScene->UpdateCardInfo();
+		gameScene->UpdateReverseButton();
 	}
 }
 
@@ -249,6 +252,8 @@ void GameMgr::OnPlayerCast()
 	{
 		currentCastPlayer += numPlayers;
 	}
+
+
 
 	// update card usage info
 	// update reverse btn
