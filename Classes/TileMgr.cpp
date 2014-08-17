@@ -236,6 +236,12 @@ void TileMgr::PostTileCreate(
 				MessageBoxA(GetActiveWindow(), "You can't place any pieces there anymore.", "No more cards", MB_ICONINFORMATION);
 				return;
 			}
+			if (g_GameMgr.GetPressNext())
+			{
+				MessageBeep(MB_ICONINFORMATION);
+				MessageBoxA(GetActiveWindow(), "Press 'Next' to continue.", "Continue", MB_ICONINFORMATION);
+				return;
+			}
 
 			if (reverseClicked)
 			{
