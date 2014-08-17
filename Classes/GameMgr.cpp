@@ -127,8 +127,21 @@ void GameMgr::OnTurnEnd()
 		std::map<int, int> gravity; // magnitudes of gravity at each position
 		gravity[1] = 1; // gravity at first column is always 1
 		for (int j = 2; j <= boardLength; ++j) { // record gravity magnitudes
-			gravity[j] = gravity[j - 1] + (gameScene->GetTileMgr()).GetTiles()[i][j - 1]->getChildrenCount() 
-				* (reverseClicked ? -1 : 1);
+
+			auto tile = gameScene->GetTileMgr().GetTiles()[i][j - 1];
+
+			auto children = tile->getChildren();
+			gravity[j] = gravity[j - 1];
+			for (auto child : children)
+			{
+				bool isReverseStone = false;
+				PlayStone* playStone = dynamic_cast<PlayStone*>(child);
+				if (playStone != nullptr && playStone->IsReverse())
+				{
+					isReverseStone = true;
+				}
+				gravity[j] += (isReverseStone ? -1 : 1);
+			}
 		}
 
 		for (int j = 1; j <= boardLength; ++j) { // move pieces
@@ -137,9 +150,17 @@ void GameMgr::OnTurnEnd()
 
 				auto childrenVec = gameScene->GetTileMgr().GetTiles()[i][j]->getChildren();
 				Node* spriteToMove = childrenVec.at(0);
-				spriteToMove->removeFromParentAndCleanup(false);
 
-				(gameScene->GetTileMgr()).GetTiles()[i][destination]->addChild(spriteToMove);
+				if (destination > boardLength)
+				{
+					// todo some blowaway sound
+					spriteToMove->removeFromParent();
+				}
+				else
+				{
+					spriteToMove->removeFromParentAndCleanup(false);
+					(gameScene->GetTileMgr()).GetTiles()[i][destination]->addChild(spriteToMove);
+				}
 			}
 		}
 
