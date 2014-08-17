@@ -63,8 +63,6 @@ bool TitleScene::init()
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
 
-	RegisterTouchHandler();
-	
 	DrawButtonffa3();
 	DrawButtonffa4();
 	DrawButtonffa3s();
@@ -189,11 +187,4 @@ void TitleScene::menuCloseCallback(Ref* pSender)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
-}
-
-void TitleScene::RegisterTouchHandler()
-{
-	auto touchListener = EventListenerTouchOneByOne::create();
-	
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 }

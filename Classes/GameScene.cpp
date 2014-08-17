@@ -46,13 +46,6 @@ bool GameScene::init()
 	ndmMouth->setAnchorPoint(Vec2(0.f, 0.5f));
 	ndmMouth->setPosition(Vec2(origin.x + 195, origin.y + visibleSize.height * 0.43));
 
-	// place tiles
-	tileMgr.Init(
-		this,
-		ndmMouth->getPosition(),
-		ndmMouth->getContentSize());
-	tileMgr.CreateTiles();
-
 	// add sprites to the scene
 	this->addChild(bgImage, 0);
 	this->addChild(ndmTan, NDM_Z);
@@ -60,6 +53,15 @@ bool GameScene::init()
 
 	// start game
 	g_GameMgr.StartGame(this);
+
+	// place tiles
+	tileMgr.Init(
+		this,
+		ndmMouth->getPosition(),
+		ndmMouth->getContentSize(),
+		g_GameMgr.GetBoardWidth(),
+		g_GameMgr.GetBoardLength() + 1);
+	tileMgr.CreateTiles();
 
 	// post start add sprites
 	Sprite* board = Sprite::create("board.png");
