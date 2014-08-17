@@ -5,12 +5,15 @@
 
 class GameScene : public cocos2d::Layer
 {
-private:
-	static const int NDM_Z = 2;
-	static const int NDM_MOUTH_Z = 3;
+public:
+	static const int PLAY_STONE_Z = 4;
 
-	static const int BOARD_Z = 2;
-	static const int BOARD_CONTENT_Z = 3;
+private:
+	static const int NDM_Z = 1;
+	static const int NDM_MOUTH_Z = 1;
+
+	static const int BOARD_Z = 4;
+	static const int BOARD_CONTENT_Z = 5;
 
 	static const int SKIP_MENU_Z = 2;
 
