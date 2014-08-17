@@ -77,8 +77,6 @@ bool TileMgr::CreateTiles()
 		createResult = CreateTilesOddRows(tileOrigin);
 	}
 
-	CheckSkip();
-
 	return createResult;
 }
 
@@ -186,16 +184,6 @@ int TileMgr::GetNumRows() const
 int TileMgr::GetNumCols() const
 {
 	return numCols;
-}
-
-void TileMgr::CheckSkip()
-{
-	if (_g_GameMgr.Instance().CanMakeMove(_g_GameMgr.Instance().GetCurrentCastPlayer()))
-	{
-		return;
-	}
-
-	g_GameMgr.DrawSkip();
 }
 
 void TileMgr::PostTileCreate(

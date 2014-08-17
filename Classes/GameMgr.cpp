@@ -220,6 +220,11 @@ void GameMgr::OnPlayerCast()
 	{
 		OnTurnEnd();
 	}
+
+	if (!CanMakeMove(GetCurrentCastPlayer()))
+	{
+		g_GameMgr.DrawSkip();
+	}
 }
 
 GameMgr::GameMode GameMgr::GetGameMode() const
@@ -300,7 +305,8 @@ bool GameMgr::CanMakeMove(int playerIdx)
 		{
 			for (int j = 0; j < boardWidth; j++)
 			{
-				if (!((gameScene->GetTileMgr()).GetTiles()[i][j]->getChildrenCount()))
+				const TileMgr::SpriteVec2D& tiles = gameScene->GetTileMgr().GetTiles();
+				if (!((tiles[j][i]->getChildrenCount())))
 				{
 					return true;
 				}
@@ -313,6 +319,8 @@ bool GameMgr::CanMakeMove(int playerIdx)
 
 void GameMgr::DrawSkip()
 {
+	if (g_GameMgr.GetGameMode() == GameMgr::none) { return; }
+
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 

@@ -2,9 +2,11 @@
 
 class TileMgr
 {
-private:
+public:
 	typedef std::vector<cc::Sprite*> SpriteVec;
 	typedef std::vector<SpriteVec> SpriteVec2D;
+
+private:
 	static const int DEFAULT_NUM_ROWS = 3;
 	static const int DEFAULT_NUM_COLS = 7;
 	static const int TILE_Z = 1;
@@ -31,8 +33,6 @@ public:
 
 	int GetNumRows() const;
 	int GetNumCols() const;
-
-	void CheckSkip();
 
 private:
 	cc::Layer* bgLayer;
