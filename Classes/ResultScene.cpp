@@ -37,7 +37,7 @@ bool ResultScene::init()
 	
 	// winner sort
 	std::vector<int> playerVector;
-	for (int i = 0; i < g_GameMgr.GetNumPlayers(); ++i)
+	for (int i = 1; i <= g_GameMgr.GetNumPlayers(); ++i)
 	{
 		playerVector.push_back(i);
 	}
@@ -75,7 +75,7 @@ bool ResultScene::init()
 	for (auto numPlayer : playerVector)
 	{
 		int currentPlayerScore = g_GameMgr.GetPlayerScore(numPlayer);
-		if (prevPlayerScore == -1 || currentPlayerScore > prevPlayerScore)
+		if (prevPlayerScore == -1 || currentPlayerScore < prevPlayerScore)
 		{
 			++currentRank;
 		}
